@@ -1,0 +1,162 @@
+<?xml version='1.0' encoding='UTF-8' standalone='no'?>
+<!-- Generator: Adobe Illustrator 15.0.0, SVG Export Plug-In . SVG Version: 6.00 Build 0)  -->
+<svg xmlns="http://www.w3.org/2000/svg" y="0px" width="0.902778in" gorn="0"  xmlns:xml="http://www.w3.org/XML/1998/namespace" version="1.1" enable-background="new 0 0 65 130" xml:space="preserve" viewBox="0 0 65 130" id="Layer_1" x="0px" height="1.80556in">
+    <desc >
+        <referenceFile >LuaNode32_ESP32_Schema.svg</referenceFile>
+    </desc>
+    <metadata  id="metadata133">
+        <rdf:RDF xmlns:rdf="http://www.w3.org/1999/02/22-rdf-syntax-ns#">
+            <cc:Work rdf:about="" xmlns:rdf="http://www.w3.org/1999/02/22-rdf-syntax-ns#" xmlns:cc="http://creativecommons.org/ns#">
+                <dc:format xmlns:dc="http://purl.org/dc/elements/1.1/">image/svg+xml</dc:format>
+                <dc:type xmlns:dc="http://purl.org/dc/elements/1.1/" xmlns:rdf="http://www.w3.org/1999/02/22-rdf-syntax-ns#" rdf:resource="http://purl.org/dc/dcmitype/StillImage"/>
+                <dc:title xmlns:dc="http://purl.org/dc/elements/1.1/"/>
+            </cc:Work>
+        </rdf:RDF>
+    </metadata>
+    <defs  id="defs131"/>
+    <g gorn="0.3"  font-size="3.5" style="font-style:normal;font-variant:normal;font-weight:normal;font-stretch:normal;font-size:3.5px;font-family:DroidSans;-inkscape-font-specification:'DroidSans, Normal';font-variant-ligatures:normal;font-variant-caps:normal;font-variant-numeric:normal;font-feature-settings:normal;text-align:end;writing-mode:lr-tb;text-anchor:end;fill:#231f20" id="text2">
+        <text y="16.316401" gorn="0.3.0"  id="tspan7780" x="55.907959">D23</text>
+    </g>
+    <g gorn="0.4"  font-size="3.5" style="font-style:normal;font-variant:normal;font-weight:normal;font-stretch:normal;font-size:3.5px;font-family:DroidSans;-inkscape-font-specification:'DroidSans, Normal';font-variant-ligatures:normal;font-variant-caps:normal;font-variant-numeric:normal;font-feature-settings:normal;text-align:end;writing-mode:lr-tb;text-anchor:end;fill:#231f20" id="text4">
+        <text y="23.507799" gorn="0.4.0"  id="tspan7778" x="55.907959">D22</text>
+    </g>
+    <g gorn="0.5"  font-size="3.5" style="font-style:normal;font-variant:normal;font-weight:normal;font-stretch:normal;font-size:3.5px;font-family:DroidSans;-inkscape-font-specification:'DroidSans, Normal';font-variant-ligatures:normal;font-variant-caps:normal;font-variant-numeric:normal;font-feature-settings:normal;text-align:end;writing-mode:lr-tb;text-anchor:end;fill:#231f20" id="text6">
+        <text y="30.6992" gorn="0.5.0"  id="tspan7776" x="55.625977">TX0</text>
+    </g>
+    <g gorn="0.6"  font-size="3.5" style="font-style:normal;font-variant:normal;font-weight:normal;font-stretch:normal;font-size:3.5px;font-family:DroidSans;-inkscape-font-specification:'DroidSans, Normal';font-variant-ligatures:normal;font-variant-caps:normal;font-variant-numeric:normal;font-feature-settings:normal;text-align:end;writing-mode:lr-tb;text-anchor:end;fill:#231f20" id="text8">
+        <text y="37.890598" gorn="0.6.0"  id="tspan7774" x="55.566162">RX0</text>
+    </g>
+    <g gorn="0.7"  font-size="3.5" style="font-style:normal;font-variant:normal;font-weight:normal;font-stretch:normal;font-size:3.5px;font-family:DroidSans;-inkscape-font-specification:'DroidSans, Normal';font-variant-ligatures:normal;font-variant-caps:normal;font-variant-numeric:normal;font-feature-settings:normal;text-align:end;writing-mode:lr-tb;text-anchor:end;fill:#231f20" id="text10">
+        <text y="45.0811" gorn="0.7.0"  id="tspan7772" x="55.907959">D21</text>
+    </g>
+    <g gorn="0.8"  font-size="3.5" style="font-style:normal;font-variant:normal;font-weight:normal;font-stretch:normal;font-size:3.5px;font-family:DroidSans;-inkscape-font-specification:'DroidSans, Normal';font-variant-ligatures:normal;font-variant-caps:normal;font-variant-numeric:normal;font-feature-settings:normal;text-align:end;writing-mode:lr-tb;text-anchor:end;fill:#231f20" id="text12">
+        <text y="52.272499" gorn="0.8.0"  id="tspan7770" x="55.907959">D19</text>
+    </g>
+    <g gorn="0.9"  font-size="3.5" style="font-style:normal;font-variant:normal;font-weight:normal;font-stretch:normal;font-size:3.5px;font-family:DroidSans;-inkscape-font-specification:'DroidSans, Normal';font-variant-ligatures:normal;font-variant-caps:normal;font-variant-numeric:normal;font-feature-settings:normal;text-align:end;writing-mode:lr-tb;text-anchor:end;fill:#231f20" id="text14">
+        <text y="59.462898" gorn="0.9.0"  id="tspan7768" x="55.907959">D18</text>
+    </g>
+    <text y="66.654297" gorn="0.10"  font-size="3.5" style="font-style:normal;font-variant:normal;font-weight:normal;font-stretch:normal;font-size:3.5px;font-family:DroidSans;-inkscape-font-specification:'DroidSans, Normal';font-variant-ligatures:normal;font-variant-caps:normal;font-variant-numeric:normal;font-feature-settings:normal;text-align:end;writing-mode:lr-tb;text-anchor:end;fill:#231f20" id="text16" x="53.980225">D5</text>
+    <g gorn="0.11"  font-size="3.5" style="font-style:normal;font-variant:normal;font-weight:normal;font-stretch:normal;font-size:3.5px;font-family:DroidSans;-inkscape-font-specification:'DroidSans, Normal';font-variant-ligatures:normal;font-variant-caps:normal;font-variant-numeric:normal;font-feature-settings:normal;text-align:end;writing-mode:lr-tb;text-anchor:end;fill:#231f20" id="text18">
+        <text y="73.845703" gorn="0.11.0"  id="tspan7766" x="55.625977">TX2</text>
+    </g>
+    <g gorn="0.12"  font-size="3.5" style="font-style:normal;font-variant:normal;font-weight:normal;font-stretch:normal;font-size:3.5px;font-family:DroidSans;-inkscape-font-specification:'DroidSans, Normal';font-variant-ligatures:normal;font-variant-caps:normal;font-variant-numeric:normal;font-feature-settings:normal;text-align:end;writing-mode:lr-tb;text-anchor:end;fill:#231f20" id="text20">
+        <text y="81.035202" gorn="0.12.0"  id="tspan7764" x="55.566162">RX2</text>
+    </g>
+    <g gorn="0.13"  font-size="3.5" style="font-style:normal;font-variant:normal;font-weight:normal;font-stretch:normal;font-size:3.5px;font-family:DroidSans;-inkscape-font-specification:'DroidSans, Normal';font-variant-ligatures:normal;font-variant-caps:normal;font-variant-numeric:normal;font-feature-settings:normal;text-align:end;writing-mode:lr-tb;text-anchor:end;fill:#231f20" id="text22">
+        <text y="88.226601" gorn="0.13.0"  id="tspan7762" x="53.980225">D4</text>
+    </g>
+    <g gorn="0.14"  font-size="3.5" style="font-style:normal;font-variant:normal;font-weight:normal;font-stretch:normal;font-size:3.5px;font-family:DroidSans;-inkscape-font-specification:'DroidSans, Normal';font-variant-ligatures:normal;font-variant-caps:normal;font-variant-numeric:normal;font-feature-settings:normal;text-align:end;writing-mode:lr-tb;text-anchor:end;fill:#231f20" id="text24">
+        <text y="95.417999" gorn="0.14.0"  id="tspan7760" x="53.980225">D2</text>
+    </g>
+    <g gorn="0.15"  font-size="3.5" style="font-style:normal;font-variant:normal;font-weight:normal;font-stretch:normal;font-size:3.5px;font-family:DroidSans;-inkscape-font-specification:'DroidSans, Normal';font-variant-ligatures:normal;font-variant-caps:normal;font-variant-numeric:normal;font-feature-settings:normal;text-align:end;writing-mode:lr-tb;text-anchor:end;fill:#231f20" id="text26">
+        <text y="102.6094" gorn="0.15.0"  id="tspan7758" x="55.907959">D15</text>
+    </g>
+    <text y="109.7988" gorn="0.16"  font-size="3.5" style="font-style:normal;font-variant:normal;font-weight:normal;font-stretch:normal;font-size:3.5px;font-family:DroidSans;-inkscape-font-specification:'DroidSans, Normal';font-variant-ligatures:normal;font-variant-caps:normal;font-variant-numeric:normal;font-feature-settings:normal;text-align:end;writing-mode:lr-tb;text-anchor:end;fill:#231f20" id="text28" x="57.141846">GND</text>
+    <text y="116.9902" gorn="0.17"  font-size="3.5" style="font-style:normal;font-variant:normal;font-weight:normal;font-stretch:normal;font-size:3.5px;font-family:DroidSans;-inkscape-font-specification:'DroidSans, Normal';font-variant-ligatures:normal;font-variant-caps:normal;font-variant-numeric:normal;font-feature-settings:normal;text-align:end;writing-mode:lr-tb;text-anchor:end;fill:#231f20" id="text30" x="55.70459">3V3</text>
+    <text y="116.9902" gorn="0.18"  font-size="3.5" style="font-size:3.5px;font-family:DroidSans;fill:#231f20" id="text32" x="9.2734003">Vin</text>
+    <text y="109.9199" gorn="0.19"  font-size="3.5" style="font-size:3.5px;font-family:DroidSans;fill:#231f20" id="text34" x="9.2725">GND</text>
+    <g gorn="0.20"  font-size="3.5" style="font-style:normal;font-variant:normal;font-weight:normal;font-stretch:normal;font-size:3.5px;font-family:DroidSans;-inkscape-font-specification:'DroidSans, Normal';font-variant-ligatures:normal;font-variant-caps:normal;font-variant-numeric:normal;font-feature-settings:normal;text-align:start;writing-mode:lr-tb;text-anchor:start;fill:#231f20" id="text36">
+        <text y="102.7266" gorn="0.20.0"  id="tspan7756" x="9.2725">D13</text>
+    </g>
+    <g gorn="0.21"  font-size="3.5" style="font-style:normal;font-variant:normal;font-weight:normal;font-stretch:normal;font-size:3.5px;font-family:DroidSans;-inkscape-font-specification:'DroidSans, Normal';font-variant-ligatures:normal;font-variant-caps:normal;font-variant-numeric:normal;font-feature-settings:normal;text-align:start;writing-mode:lr-tb;text-anchor:start;fill:#231f20" id="text38">
+        <text y="95.533203" gorn="0.21.0"  id="tspan7754" x="9.2725">D12</text>
+    </g>
+    <g gorn="0.22"  font-size="3.5" style="font-style:normal;font-variant:normal;font-weight:normal;font-stretch:normal;font-size:3.5px;font-family:DroidSans;-inkscape-font-specification:'DroidSans, Normal';font-variant-ligatures:normal;font-variant-caps:normal;font-variant-numeric:normal;font-feature-settings:normal;text-align:start;writing-mode:lr-tb;text-anchor:start;fill:#231f20" id="text40">
+        <text y="88.338898" gorn="0.22.0"  id="tspan7752" x="9.2725">D14</text>
+    </g>
+    <g gorn="0.23"  font-size="3.5" style="font-style:normal;font-variant:normal;font-weight:normal;font-stretch:normal;font-size:3.5px;font-family:DroidSans;-inkscape-font-specification:'DroidSans, Normal';font-variant-ligatures:normal;font-variant-caps:normal;font-variant-numeric:normal;font-feature-settings:normal;text-align:start;writing-mode:lr-tb;text-anchor:start;fill:#231f20" id="text42">
+        <text y="81.144501" gorn="0.23.0"  id="tspan7750" x="9.2725">D27</text>
+    </g>
+    <g gorn="0.24"  font-size="3.5" style="font-style:normal;font-variant:normal;font-weight:normal;font-stretch:normal;font-size:3.5px;font-family:DroidSans;-inkscape-font-specification:'DroidSans, Normal';font-variant-ligatures:normal;font-variant-caps:normal;font-variant-numeric:normal;font-feature-settings:normal;text-align:start;writing-mode:lr-tb;text-anchor:start;fill:#231f20" id="text44">
+        <text y="73.952103" gorn="0.24.0"  id="tspan7748" x="9.2725">D26</text>
+    </g>
+    <g gorn="0.25"  font-size="3.5" style="font-style:normal;font-variant:normal;font-weight:normal;font-stretch:normal;font-size:3.5px;font-family:DroidSans;-inkscape-font-specification:'DroidSans, Normal';font-variant-ligatures:normal;font-variant-caps:normal;font-variant-numeric:normal;font-feature-settings:normal;text-align:start;writing-mode:lr-tb;text-anchor:start;fill:#231f20" id="text46">
+        <text y="66.757797" gorn="0.25.0"  id="tspan7746" x="9.2725">D25</text>
+    </g>
+    <g gorn="0.26"  font-size="3.5" style="font-style:normal;font-variant:normal;font-weight:normal;font-stretch:normal;font-size:3.5px;font-family:DroidSans;-inkscape-font-specification:'DroidSans, Normal';font-variant-ligatures:normal;font-variant-caps:normal;font-variant-numeric:normal;font-feature-settings:normal;text-align:start;writing-mode:lr-tb;text-anchor:start;fill:#231f20" id="text48">
+        <text y="59.5625" gorn="0.26.0"  id="tspan7744" x="9.2725">D33</text>
+    </g>
+    <g gorn="0.27"  font-size="3.5" style="font-style:normal;font-variant:normal;font-weight:normal;font-stretch:normal;font-size:3.5px;font-family:DroidSans;-inkscape-font-specification:'DroidSans, Normal';font-variant-ligatures:normal;font-variant-caps:normal;font-variant-numeric:normal;font-feature-settings:normal;text-align:start;writing-mode:lr-tb;text-anchor:start;fill:#231f20" id="text50">
+        <text y="52.369099" gorn="0.27.0"  id="tspan7742" x="9.2725">D32</text>
+    </g>
+    <g gorn="0.28"  font-size="3.5" style="font-style:normal;font-variant:normal;font-weight:normal;font-stretch:normal;font-size:3.5px;font-family:DroidSans;-inkscape-font-specification:'DroidSans, Normal';font-variant-ligatures:normal;font-variant-caps:normal;font-variant-numeric:normal;font-feature-settings:normal;text-align:start;writing-mode:lr-tb;text-anchor:start;fill:#231f20" id="text52">
+        <text y="45.1758" gorn="0.28.0"  id="tspan7740" x="9.2725">D35</text>
+    </g>
+    <g gorn="0.29"  font-size="3.5" style="font-style:normal;font-variant:normal;font-weight:normal;font-stretch:normal;font-size:3.5px;font-family:DroidSans;-inkscape-font-specification:'DroidSans, Normal';font-variant-ligatures:normal;font-variant-caps:normal;font-variant-numeric:normal;font-feature-settings:normal;text-align:start;writing-mode:lr-tb;text-anchor:start;fill:#231f20" id="text54">
+        <text y="37.982399" gorn="0.29.0"  id="tspan7738" x="9.2725">D34</text>
+    </g>
+    <g gorn="0.30"  font-size="3.5" style="font-style:normal;font-variant:normal;font-weight:normal;font-stretch:normal;font-size:3.5px;font-family:DroidSans;-inkscape-font-specification:'DroidSans, Normal';font-variant-ligatures:normal;font-variant-caps:normal;font-variant-numeric:normal;font-feature-settings:normal;text-align:start;writing-mode:lr-tb;text-anchor:start;fill:#231f20" id="text56">
+        <text y="30.7871" gorn="0.30.0"  id="tspan7736" x="9.2725">VN</text>
+    </g>
+    <g gorn="0.31"  font-size="3.5" style="font-style:normal;font-variant:normal;font-weight:normal;font-stretch:normal;font-size:3.5px;font-family:DroidSans;-inkscape-font-specification:'DroidSans, Normal';font-variant-ligatures:normal;font-variant-caps:normal;font-variant-numeric:normal;font-feature-settings:normal;text-align:start;writing-mode:lr-tb;text-anchor:start;fill:#231f20" id="text58">
+        <text y="23.5938" gorn="0.31.0"  id="tspan7734" x="9.2725">VP</text>
+    </g>
+    <g gorn="0.32"  font-size="3.5" style="font-style:normal;font-variant:normal;font-weight:normal;font-stretch:normal;font-size:3.5px;font-family:DroidSans;-inkscape-font-specification:'DroidSans, Normal';font-variant-ligatures:normal;font-variant-caps:normal;font-variant-numeric:normal;font-feature-settings:normal;text-align:start;writing-mode:lr-tb;text-anchor:start;fill:#231f20" id="text60">
+        <text y="16.316401" gorn="0.32.0"  id="tspan7732" x="9.2734003">EN</text>
+    </g>
+    <rect y="7.2010002" width="50.400002" gorn="0.33"  style="stroke-miterlimit:10" stroke-miterlimit="10" id="rect62" x="7.2719998" stroke="#231f20" fill="none" height="116.2" stroke-width="0.69999999"/>
+    <line gorn="0.34"  y1="15.386" x1="0.001" style="stroke-miterlimit:10" y2="15.401" stroke-miterlimit="10" id="line64" stroke="#231f20" x2="7.2719998" fill="none" stroke-width="1"/>
+    <line gorn="0.35"  y1="22.601" x1="0.001" style="stroke-miterlimit:10" y2="22.617001" stroke-miterlimit="10" id="line66" stroke="#231f20" x2="7.2719998" fill="none" stroke-width="1"/>
+    <line gorn="0.36"  y1="29.801001" x1="0.001" style="stroke-miterlimit:10" y2="29.816999" stroke-miterlimit="10" id="line68" stroke="#231f20" x2="7.2719998" fill="none" stroke-width="1"/>
+    <line gorn="0.37"  y1="36.970001" x1="0.001" style="stroke-miterlimit:10" y2="36.986" stroke-miterlimit="10" id="line70" stroke="#231f20" x2="7.2719998" fill="none" stroke-width="1"/>
+    <line gorn="0.38"  y1="44.186001" x1="0.001" style="stroke-miterlimit:10" y2="44.202" stroke-miterlimit="10" id="line72" stroke="#231f20" x2="7.2719998" fill="none" stroke-width="1"/>
+    <line gorn="0.39"  y1="51.386002" x1="0.001" style="stroke-miterlimit:10" y2="51.401001" stroke-miterlimit="10" id="line74" stroke="#231f20" x2="7.2719998" fill="none" stroke-width="1"/>
+    <line gorn="0.40"  y1="58.585999" x1="0.001" style="stroke-miterlimit:10" y2="58.602001" stroke-miterlimit="10" id="line76" stroke="#231f20" x2="7.2719998" fill="none" stroke-width="1"/>
+    <line gorn="0.41"  y1="65.803001" x1="0.001" style="stroke-miterlimit:10" y2="65.817001" stroke-miterlimit="10" id="line78" stroke="#231f20" x2="7.2719998" fill="none" stroke-width="1"/>
+    <line gorn="0.42"  y1="73.001999" x1="0.001" style="stroke-miterlimit:10" y2="73.018997" stroke-miterlimit="10" id="line80" stroke="#231f20" x2="7.2719998" fill="none" stroke-width="1"/>
+    <line gorn="0.43"  y1="80.171997" x1="0.001" style="stroke-miterlimit:10" y2="80.186996" stroke-miterlimit="10" id="line82" stroke="#231f20" x2="7.2719998" fill="none" stroke-width="1"/>
+    <line gorn="0.44"  y1="87.388" x1="0.001" style="stroke-miterlimit:10" y2="87.402" stroke-miterlimit="10" id="line84" stroke="#231f20" x2="7.2719998" fill="none" stroke-width="1"/>
+    <line gorn="0.45"  y1="94.587997" x1="0.001" style="stroke-miterlimit:10" y2="94.602997" stroke-miterlimit="10" id="line86" stroke="#231f20" x2="7.2719998" fill="none" stroke-width="1"/>
+    <line gorn="0.46"  y1="101.856" x1="0.001" style="stroke-miterlimit:10" y2="101.873" stroke-miterlimit="10" id="line88" stroke="#231f20" x2="7.2719998" fill="none" stroke-width="1"/>
+    <line gorn="0.47"  y1="109.072" x1="0.001" style="stroke-miterlimit:10" y2="109.088" stroke-miterlimit="10" id="line90" stroke="#231f20" x2="7.2719998" fill="none" stroke-width="1"/>
+    <line gorn="0.48"  y1="116.272" x1="0.001" style="stroke-miterlimit:10" y2="116.289" stroke-miterlimit="10" id="line92" stroke="#231f20" x2="7.2719998" fill="none" stroke-width="1"/>
+    <line gorn="0.49"  y1="15.439" x1="57.602001" style="stroke-miterlimit:10" y2="15.455" stroke-miterlimit="10" id="line94" stroke="#231f20" x2="64.872002" fill="none" stroke-width="1"/>
+    <line gorn="0.50"  y1="22.655001" x1="57.602001" style="stroke-miterlimit:10" y2="22.671" stroke-miterlimit="10" id="line96" stroke="#231f20" x2="64.873001" fill="none" stroke-width="1"/>
+    <line gorn="0.51"  y1="29.855" x1="57.602001" style="stroke-miterlimit:10" y2="29.871" stroke-miterlimit="10" id="line98" stroke="#231f20" x2="64.873001" fill="none" stroke-width="1"/>
+    <line gorn="0.52"  y1="37.023998" x1="57.602001" style="stroke-miterlimit:10" y2="37.039001" stroke-miterlimit="10" id="line100" stroke="#231f20" x2="64.872002" fill="none" stroke-width="1"/>
+    <line gorn="0.53"  y1="44.240002" x1="57.602001" style="stroke-miterlimit:10" y2="44.255001" stroke-miterlimit="10" id="line102" stroke="#231f20" x2="64.873001" fill="none" stroke-width="1"/>
+    <line gorn="0.54"  y1="51.438999" x1="57.602001" style="stroke-miterlimit:10" y2="51.455002" stroke-miterlimit="10" id="line104" stroke="#231f20" x2="64.873001" fill="none" stroke-width="1"/>
+    <line gorn="0.55"  y1="58.639999" x1="57.602001" style="stroke-miterlimit:10" y2="58.655998" stroke-miterlimit="10" id="line106" stroke="#231f20" x2="64.872002" fill="none" stroke-width="1"/>
+    <line gorn="0.56"  y1="65.855003" x1="57.602001" style="stroke-miterlimit:10" y2="65.871002" stroke-miterlimit="10" id="line108" stroke="#231f20" x2="64.873001" fill="none" stroke-width="1"/>
+    <line gorn="0.57"  y1="73.056999" x1="57.602001" style="stroke-miterlimit:10" y2="73.070999" stroke-miterlimit="10" id="line110" stroke="#231f20" x2="64.873001" fill="none" stroke-width="1"/>
+    <line gorn="0.58"  y1="80.225998" x1="57.602001" style="stroke-miterlimit:10" y2="80.239998" stroke-miterlimit="10" id="line112" stroke="#231f20" x2="64.872002" fill="none" stroke-width="1"/>
+    <line gorn="0.59"  y1="87.440002" x1="57.602001" style="stroke-miterlimit:10" y2="87.457001" stroke-miterlimit="10" id="line114" stroke="#231f20" x2="64.873001" fill="none" stroke-width="1"/>
+    <line gorn="0.60"  y1="94.641998" x1="57.602001" style="stroke-miterlimit:10" y2="94.655998" stroke-miterlimit="10" id="line116" stroke="#231f20" x2="64.873001" fill="none" stroke-width="1"/>
+    <line gorn="0.61"  y1="101.91" x1="57.602001" style="stroke-miterlimit:10" y2="101.927" stroke-miterlimit="10" id="line118" stroke="#231f20" x2="64.872002" fill="none" stroke-width="1"/>
+    <line gorn="0.62"  y1="109.127" x1="57.602001" style="stroke-miterlimit:10" y2="109.143" stroke-miterlimit="10" id="line120" stroke="#231f20" x2="64.873001" fill="none" stroke-width="1"/>
+    <line gorn="0.63"  y1="116.326" x1="57.602001" style="stroke-miterlimit:10" y2="116.343" stroke-miterlimit="10" id="line122" stroke="#231f20" x2="64.873001" fill="none" stroke-width="1"/>
+    <g gorn="0.64"  font-size="4.25" style="font-style:normal;font-variant:normal;font-weight:normal;font-stretch:normal;font-size:4.25px;font-family:DroidSans;-inkscape-font-specification:'DroidSans, Normal';font-variant-ligatures:normal;font-variant-caps:normal;font-variant-numeric:normal;font-feature-settings:normal;text-align:center;writing-mode:lr-tb;text-anchor:middle" id="text124">
+        <text y="59.83194" gorn="0.64.0"  id="tspan7728" x="32.294601">LuaNode32</text>
+        <text y="65.14444" gorn="0.64.1"  id="tspan7730" x="32.294601">ESP32</text>
+    </g>
+    <line gorn="0.65"  y1="15.369827" x1="0.0052564703" style="stroke-miterlimit:10" y2="15.384832" stroke-miterlimit="10" id="connector0pin" stroke="#231f20" x2="0.77180481" fill="none" stroke-width="0.32474488"/>
+    <line gorn="0.66"  y1="22.587141" x1="0.0052564703" style="stroke-miterlimit:10" y2="22.603146" stroke-miterlimit="10" id="connector1pin" stroke="#231f20" x2="0.77180481" fill="none" stroke-width="0.32474488"/>
+    <line gorn="0.67"  y1="29.78945" x1="0.0052564703" style="stroke-miterlimit:10" y2="29.805452" stroke-miterlimit="10" id="connector2pin" stroke="#231f20" x2="0.77180481" fill="none" stroke-width="0.32474488"/>
+    <line gorn="0.68"  y1="36.960747" x1="0.0052564703" style="stroke-miterlimit:10" y2="36.976753" stroke-miterlimit="10" id="connector3pin" stroke="#231f20" x2="0.77180481" fill="none" stroke-width="0.32474488"/>
+    <line gorn="0.69"  y1="44.179062" x1="0.0052564703" style="stroke-miterlimit:10" y2="44.195065" stroke-miterlimit="10" id="connector4pin" stroke="#231f20" x2="0.77180481" fill="none" stroke-width="0.32474488"/>
+    <line gorn="0.70"  y1="51.381371" x1="0.0052564703" style="stroke-miterlimit:10" y2="51.396374" stroke-miterlimit="10" id="connector5pin" stroke="#231f20" x2="0.77180481" fill="none" stroke-width="0.32474488"/>
+    <line gorn="0.71"  y1="58.583675" x1="0.0052564703" style="stroke-miterlimit:10" y2="58.599682" stroke-miterlimit="10" id="connector6pin" stroke="#231f20" x2="0.77180481" fill="none" stroke-width="0.32474488"/>
+    <line gorn="0.72"  y1="65.802994" x1="0.0052564703" style="stroke-miterlimit:10" y2="65.816994" stroke-miterlimit="10" id="connector7pin" stroke="#231f20" x2="0.77180481" fill="none" stroke-width="0.32474488"/>
+    <line gorn="0.73"  y1="73.004295" x1="0.0052564703" style="stroke-miterlimit:10" y2="73.021301" stroke-miterlimit="10" id="connector8pin" stroke="#231f20" x2="0.77180481" fill="none" stroke-width="0.32474488"/>
+    <line gorn="0.74"  y1="80.17659" x1="0.0052564703" style="stroke-miterlimit:10" y2="80.191597" stroke-miterlimit="10" id="connector9pin" stroke="#231f20" x2="0.77180481" fill="none" stroke-width="0.32474488"/>
+    <line gorn="0.75"  y1="87.394905" x1="0.0052564703" style="stroke-miterlimit:10" y2="87.408913" stroke-miterlimit="10" id="connector10pin" stroke="#231f20" x2="0.77180481" fill="none" stroke-width="0.32474488"/>
+    <line gorn="0.76"  y1="94.597214" x1="0.0052564703" style="stroke-miterlimit:10" y2="94.612221" stroke-miterlimit="10" id="connector11pin" stroke="#231f20" x2="0.77180481" fill="none" stroke-width="0.32474488"/>
+    <line gorn="0.77"  y1="101.86755" x1="0.0052564703" style="stroke-miterlimit:10" y2="101.88455" stroke-miterlimit="10" id="connector12pin" stroke="#231f20" x2="0.77180481" fill="none" stroke-width="0.32474488"/>
+    <line gorn="0.78"  y1="109.08585" x1="0.0052564703" style="stroke-miterlimit:10" y2="109.10186" stroke-miterlimit="10" id="connector13pin" stroke="#231f20" x2="0.77180481" fill="none" stroke-width="0.32474488"/>
+    <line gorn="0.79"  y1="116.28817" x1="0.0052564703" style="stroke-miterlimit:10" y2="116.30518" stroke-miterlimit="10" id="connector14pin" stroke="#231f20" x2="0.77180481" fill="none" stroke-width="0.32474488"/>
+    <line gorn="0.80"  y1="15.423588" x1="63.944031" style="stroke-miterlimit:10" y2="15.439592" stroke-miterlimit="10" id="connector42pin" stroke="#231f20" x2="64.868347" fill="none" stroke-width="0.35662282"/>
+    <line gorn="0.81"  y1="22.641792" x1="63.944031" style="stroke-miterlimit:10" y2="22.657797" stroke-miterlimit="10" id="connector41pin" stroke="#231f20" x2="64.868469" fill="none" stroke-width="0.35662282"/>
+    <line gorn="0.82"  y1="29.84399" x1="63.944031" style="stroke-miterlimit:10" y2="29.859997" stroke-miterlimit="10" id="connector40pin" stroke="#231f20" x2="64.868469" fill="none" stroke-width="0.35662282"/>
+    <line gorn="0.83"  y1="37.015179" x1="63.944031" style="stroke-miterlimit:10" y2="37.03019" stroke-miterlimit="10" id="connector39pin" stroke="#231f20" x2="64.868347" fill="none" stroke-width="0.35662282"/>
+    <line gorn="0.84"  y1="44.233387" x1="63.944031" style="stroke-miterlimit:10" y2="44.24839" stroke-miterlimit="10" id="connector38pin" stroke="#231f20" x2="64.868469" fill="none" stroke-width="0.35662282"/>
+    <line gorn="0.85"  y1="51.434586" x1="63.944031" style="stroke-miterlimit:10" y2="51.450592" stroke-miterlimit="10" id="connector37pin" stroke="#231f20" x2="64.868469" fill="none" stroke-width="0.35662282"/>
+    <line gorn="0.86"  y1="58.637783" x1="63.944031" style="stroke-miterlimit:10" y2="58.65379" stroke-miterlimit="10" id="connector36pin" stroke="#231f20" x2="64.868347" fill="none" stroke-width="0.35662282"/>
+    <line gorn="0.87"  y1="65.854996" x1="63.944031" style="stroke-miterlimit:10" y2="65.870995" stroke-miterlimit="10" id="connector35pin" stroke="#231f20" x2="64.868469" fill="none" stroke-width="0.35662282"/>
+    <line gorn="0.88"  y1="73.059189" x1="63.944031" style="stroke-miterlimit:10" y2="73.073189" stroke-miterlimit="10" id="connector34pin" stroke="#231f20" x2="64.868469" fill="none" stroke-width="0.35662282"/>
+    <line gorn="0.89"  y1="80.230377" x1="63.944031" style="stroke-miterlimit:10" y2="80.244385" stroke-miterlimit="10" id="connector33pin" stroke="#231f20" x2="64.868347" fill="none" stroke-width="0.35662282"/>
+    <line gorn="0.90"  y1="87.446587" x1="63.944031" style="stroke-miterlimit:10" y2="87.463585" stroke-miterlimit="10" id="connector19pin" stroke="#231f20" x2="64.868469" fill="none" stroke-width="0.35662282"/>
+    <line gorn="0.91"  y1="94.65078" x1="63.944031" style="stroke-miterlimit:10" y2="94.664787" stroke-miterlimit="10" id="connector18pin" stroke="#231f20" x2="64.868469" fill="none" stroke-width="0.35662282"/>
+    <line gorn="0.92"  y1="101.92101" x1="63.944031" style="stroke-miterlimit:10" y2="101.93801" stroke-miterlimit="10" id="connector17pin" stroke="#231f20" x2="64.868347" fill="none" stroke-width="0.35662282"/>
+    <line gorn="0.93"  y1="109.14021" x1="63.944031" style="stroke-miterlimit:10" y2="109.15621" stroke-miterlimit="10" id="connector16pin" stroke="#231f20" x2="64.868469" fill="none" stroke-width="0.35662282"/>
+    <line gorn="0.94"  y1="116.3414" x1="63.944031" style="stroke-miterlimit:10" y2="116.35841" stroke-miterlimit="10" id="connector15pin" stroke="#231f20" x2="64.868469" fill="none" stroke-width="0.35662282"/>
+</svg>
