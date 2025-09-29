@@ -1,7 +1,7 @@
 CC = gcc
 CFLAGS = -Wall -g
 test: main.o joy_driver.o
-	   $(CC) $(CFLAGS) main.o joy_driver.o -o test
+	   $(CC) $(CFLAGS) main.o joy_driver.o -g -o test
 
 %.o: %.c *.h
 	$(CC) $(CFLAGS) -c $< -o $@
