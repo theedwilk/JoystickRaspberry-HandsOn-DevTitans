@@ -1,19 +1,18 @@
-#include <Arduino.h>
+const int PIN_UP      = 2;
+const int PIN_RIGHT   = 3;
+const int PIN_DOWN    = 4;
+const int PIN_LEFT    = 5;
+const int PIN_START   = 6;
+const int PIN_SELECT  = 7;
+const int PIN_ANALOGB = 8;
 
-// ------------ Mapeamento de pinos ------------
-const int PIN_UP      = 36; 
-const int PIN_RIGHT   = 39;
-const int PIN_DOWN    = 34;
-const int PIN_LEFT    = 35;
-const int PIN_START   = 32;
-const int PIN_SELECT  = 33;
-const int PIN_ANALOGB = 25;
+const int PIN_AXIS_X = A0;
+const int PIN_AXIS_Y = A1;
 
-const int PIN_X_AXIS  = 26;  
-const int PIN_Y_AXIS  = 27;  
-
-// ------------ Configuração de debounce ------------
 const uint16_t DEBOUNCE_MS = 25;
+const int AXIS_CENTER_VAL_X = 333;
+const int AXIS_CENTER_VAL_Y = 330;
+const int AXIS_THRESHOLD  = 300;
 
 struct Button {
   const char* name;
@@ -35,13 +34,8 @@ Button buttons[] = {
 };
 const size_t N_BUTTONS = sizeof(buttons)/sizeof(buttons[0]);
 
-// Eixos
-int lastX = -1, lastY = -1;
-const int AXIS_EPS = 30;         
-bool xMoving = false;
-bool yMoving = false;
-
 void setupPinModes() {
+  // Configura os pinos digitais dos botões
   for (size_t i = 0; i < N_BUTTONS; ++i) {
     if (buttons[i].hasInternalPullup) {
       pinMode(buttons[i].pin, INPUT_PULLUP);
@@ -56,6 +50,8 @@ void setup() {
   delay(200);
   setupPinModes();
   Serial.println("Joystick ESP32 iniciado.");
+  // Adicionar cabeçalho para facilitar a leitura dos dados seriais
+  Serial.println("UP,RIGHT,DOWN,LEFT,START,SELECT,ANALOG,DPAD_UP,DPAD_DOWN,DPAD_LEFT,DPAD_RIGHT");
 }
 
 void readButtons(int states[]) {
@@ -74,54 +70,80 @@ void readButtons(int states[]) {
       b.lastStable = raw;
     }
 
-    // ativo em 0 → pressionado = 1, solto = 0
     states[i] = (b.lastStable == LOW) ? 1 : 0;
   }
 }
 
-void readAxes(int &xState, int &yState) {
-  int x = analogRead(PIN_X_AXIS);
-  int y = analogRead(PIN_Y_AXIS);
+void readDPadFromAnalog(int dpadStates[]) {
+  int x = analogRead(PIN_AXIS_X);
+  int y = analogRead(PIN_AXIS_Y);
 
-  // X
-  if (lastX >= 0) {
-    if (abs(x - lastX) > AXIS_EPS) {
-      xMoving = true;
-    } else {
-      xMoving = false;
-    }
-  }
-  lastX = x;
-  xState = xMoving ? 1 : 0;
+  int xDelta = x - AXIS_CENTER_VAL_X;
+  int yDelta = y - AXIS_CENTER_VAL_Y;
 
-  // Y
-  if (lastY >= 0) {
-    if (abs(y - lastY) > AXIS_EPS) {
-      yMoving = true;
-    } else {
-      yMoving = false;
-    }
+  bool up_active = false;
+  bool down_active = false;
+  bool left_active = false;
+  bool right_active = false;
+
+  if (yDelta < -AXIS_THRESHOLD) {
+    up_active = true;
+  } else if (yDelta > AXIS_THRESHOLD) {
+    down_active = true;
   }
-  lastY = y;
-  yState = yMoving ? 1 : 0;
+
+  if (xDelta < -AXIS_THRESHOLD) {
+    left_active = true;
+  } else if (xDelta > AXIS_THRESHOLD) {
+    right_active = true;
+  }
+
+  dpadStates[0] = up_active ? 1 : 0;
+  dpadStates[1] = down_active ? 1 : 0;
+  dpadStates[2] = left_active ? 1 : 0;
+  dpadStates[3] = right_active ? 1 : 0;
+}
+
+void readAllStates(int allStates[]) {
+  // Lê os estados dos botões digitais
+  readButtons(allStates); 
+  
+  // Lê os estados do D-Pad
+  int dpadStates[4]; // [UP, DOWN, LEFT, RIGHT]
+  readDPadFromAnalog(dpadStates);
+
+  // Consolida os estados do D-Pad no array
+  for (int i = 0; i < 4; ++i) {
+    allStates[7 + i] = dpadStates[i];  // Posições 7, 8, 9, 10 no array
+  }
+}
+
+void sendJoystickData(int allStates[]) {
+  Serial.print("J");  // Prefixo para indicar início de pacote
+  
+  // Envia os estados dos botões
+  for (int i = 0; i < 7; ++i) {
+    Serial.print(allStates[i]);
+    Serial.print(",");
+  }
+  
+  // Envia os estados do D-Pad
+  for (int i = 7; i < 11; ++i) {
+    Serial.print(allStates[i]);
+    Serial.print(",");
+  }
+
+  Serial.println();  // Finaliza a linha de dados
 }
 
 void loop() {
-  int states[N_BUTTONS];
-  int xAxis, yAxis;
+  int allStates[11];  // 7 botões + 4 D-Pad
 
-  readButtons(states);
-  readAxes(xAxis, yAxis);
+  // Lê todos os estados (botões + D-Pad)
+  readAllStates(allStates); 
 
-  // imprime todos os estados separados por vírgula
-  //UP,RIGHT,DOWN,LEFT,START,SELECT,ANALOG,X-AXIS,Y-AXIS
-  for (size_t i = 0; i < N_BUTTONS; ++i) {
-    Serial.print(states[i]);
-    Serial.print(",");
-  }
-  Serial.print(xAxis);
-  Serial.print(",");
-  Serial.println(yAxis);
+  // Envia os dados através da serial
+  sendJoystickData(allStates); 
 
-  delay(50); // ajusta a taxa de atualização
+  delay(50); 
 }
