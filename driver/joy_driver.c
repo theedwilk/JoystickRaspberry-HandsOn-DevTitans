@@ -25,12 +25,25 @@
 #define EVDEV_BUTTON_B  BTN_EAST   // Typically 'B' or 'Circle'
 #define EVDEV_BUTTON_X  BTN_WEST   // Typically 'X' or 'Square'
 #define EVDEV_BUTTON_Y  BTN_NORTH  // Typically 'Y' or 'Triangle'
+#define EVDEV_BUTTON_SEL BTN_SELECT
+#define EVDEV_BUTTON_ST BTN_START
+#define EVDEV_BUTTON_DOWN BTN_DPAD_DOWN
+#define EVDEV_BUTTON_RIGHT BTN_DPAD_RIGHT
+#define EVDEV_BUTTON_UP BTN_DPAD_UP
+#define EVDEV_BUTTON_LEFT BTN_DPAD_LEFT
 
 struct { unsigned short bit; int code; } buttons[] = {
     {A_BUTTON_MASK, EVDEV_BUTTON_A},
     {B_BUTTON_MASK, EVDEV_BUTTON_B},
     {X_BUTTON_MASK, EVDEV_BUTTON_X},
     {Y_BUTTON_MASK, EVDEV_BUTTON_Y},
+    {SEL_BUTTON_MASK, EVDEV_BUTTON_SEL},
+    {ST_BUTTON_MASK, EVDEV_BUTTON_ST},
+    {UP_BUTTON_MASK, EVDEV_BUTTON_UP},
+    {DOWN_BUTTON_MASK, EVDEV_BUTTON_DOWN},
+    {LEFT_BUTTON_MASK, EVDEV_BUTTON_LEFT},
+    {RIGHT_BUTTON_MASK, EVDEV_BUTTON_RIGHT},
+
 };
 
 typedef enum {
@@ -39,7 +52,7 @@ typedef enum {
 } State_t;
 
 void print_binary(uint16_t value) {
-    for (int i = 7; i >= 0; i--) {
+    for (int i = 9; i >= 0; i--) {
         // Check if the i-th bit is set and print 1 or 0
         putchar((value & (1 << i)) ? '1' : '0');
     }
@@ -66,6 +79,12 @@ int setup_virtual_device(const char *name) {
     ioctl(fd, UI_SET_KEYBIT, EVDEV_BUTTON_B);
     ioctl(fd, UI_SET_KEYBIT, EVDEV_BUTTON_X);
     ioctl(fd, UI_SET_KEYBIT, EVDEV_BUTTON_Y);
+    ioctl(fd, UI_SET_KEYBIT, EVDEV_BUTTON_SEL);
+    ioctl(fd, UI_SET_KEYBIT, EVDEV_BUTTON_ST);
+    ioctl(fd, UI_SET_KEYBIT, EVDEV_BUTTON_UP);
+    ioctl(fd, UI_SET_KEYBIT, EVDEV_BUTTON_DOWN);
+    ioctl(fd, UI_SET_KEYBIT, EVDEV_BUTTON_LEFT);
+    ioctl(fd, UI_SET_KEYBIT, EVDEV_BUTTON_RIGHT);
 
     // Create the device structure:
     struct uinput_user_dev uidev;
@@ -124,8 +143,8 @@ static int emit_event(int fd, int type, int code, int value) {
 //Each Gpio state will be written to a bit using a MASK
 void readGpio() {
 static int currInput = 0;
-uint16_t testInputList[] = {A_BUTTON_MASK,B_BUTTON_MASK,X_BUTTON_MASK,Y_BUTTON_MASK,0x0000};
-if (currInput == 4) {
+uint16_t testInputList[] = {A_BUTTON_MASK,B_BUTTON_MASK,X_BUTTON_MASK,Y_BUTTON_MASK, UP_BUTTON_MASK,DOWN_BUTTON_MASK,LEFT_BUTTON_MASK,RIGHT_BUTTON_MASK,0x0000};
+if (testInputList[currInput] == 0x0000) {
     input_data = 0x0000;
     currInput = 0;
 } else {
