@@ -1,0 +1,29 @@
+# Kernel module build file for nesjoy_gpiod
+obj-m += nesjoy_gpiod.o
+
+KDIR ?= /lib/modules/$(shell uname -r)/build
+PWD  := $(shell pwd)
+
+.PHONY: all modules clean install load unload reload
+
+all: modules
+
+modules:
+	$(MAKE) -C $(KDIR) M=$(PWD) modules
+
+clean:
+	$(MAKE) -C $(KDIR) M=$(PWD) clean
+
+install: modules
+	@echo "[*] Install nesjoy_gpiod.ko into /lib/modules/$(shell uname -r)/extra"
+	sudo mkdir -p /lib/modules/$(shell uname -r)/extra
+	sudo cp -v nesjoy_gpiod.ko /lib/modules/$(shell uname -r)/extra/
+	sudo depmod -a
+
+load:
+	sudo insmod ./nesjoy_gpiod.ko || true
+
+unload:
+	sudo rmmod nesjoy_gpiod || true
+
+reload: unload load

@@ -1,0 +1,36 @@
+/dts-v1/;
+/plugin/;
+
+/ {
+    compatible = "brcm,bcm2835";
+
+    /* Fragmento: cria o device 'nesjoy' no /soc com os três GPIOs */
+    fragment@0 {
+        target-path = "/soc";
+        __overlay__ {
+            nesjoy: nesjoy@0 {
+                compatible = "example,nesjoy-gpiod";
+
+                /* Formato: <&gpio N FLAGS>
+                 * FLAGS: 0 = GPIO_ACTIVE_HIGH (padrão); 1 = GPIO_ACTIVE_LOW (não usamos aqui)
+                 */
+                latch-gpios = <&gpio 17 0>;  /* pino físico 11 */
+                clk-gpios   = <&gpio 27 0>;  /* pino físico 13 */
+                data-gpios  = <&gpio 22 0>;  /* pino físico 15 */
+
+                status = "okay";
+            };
+        };
+    };
+
+    /* Overrides opcionais para trocar os pinos via config.txt
+     * Exemplo de uso:
+     *   dtoverlay=nesjoy,latch_pin=5,clk_pin=6,data_pin=13
+     * (valores são números de GPIO, não números de pino físico)
+     */
+    __overrides__ {
+        latch_pin = <&nesjoy>, "latch-gpios:4";
+        clk_pin   = <&nesjoy>, "clk-gpios:4";
+        data_pin  = <&nesjoy>, "data-gpios:4";
+    };
+};
