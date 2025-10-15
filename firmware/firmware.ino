@@ -124,13 +124,13 @@ void sendJoystickData(int allStates[]) {
   // Envia os estados dos botões
   for (int i = 0; i < 7; ++i) {
     Serial.print(allStates[i]);
-    Serial.print(",");
+    //Serial.print(",");
   }
   
   // Envia os estados do D-Pad
   for (int i = 7; i < 11; ++i) {
     Serial.print(allStates[i]);
-    Serial.print(",");
+    //Serial.print(",");
   }
 
   Serial.println();  // Finaliza a linha de dados
