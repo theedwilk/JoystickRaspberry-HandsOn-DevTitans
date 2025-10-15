@@ -32,7 +32,7 @@
 #define EVDEV_BUTTON_UP BTN_DPAD_UP
 #define EVDEV_BUTTON_LEFT BTN_DPAD_LEFT
 
-struct { unsigned short bit; int code; } buttons[] = {
+struct { uint16_t bit; int code; } buttons[] = {
     {A_BUTTON_MASK, EVDEV_BUTTON_A},
     {B_BUTTON_MASK, EVDEV_BUTTON_B},
     {X_BUTTON_MASK, EVDEV_BUTTON_X},
