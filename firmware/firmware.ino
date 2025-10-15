@@ -1,100 +1,149 @@
-#include "shieldInitConfig.h"
+const int PIN_UP      = 2;
+const int PIN_RIGHT   = 3;
+const int PIN_DOWN    = 4;
+const int PIN_LEFT    = 5;
+const int PIN_START   = 6;
+const int PIN_SELECT  = 7;
+const int PIN_ANALOGB = 8;
 
-void readAnalogs(){
-  
-  //analogicos variam de 0 a 67
-  current_x = analogRead(X)/ 10;
-  current_y = analogRead(Y)/ 10;
-  
+const int PIN_AXIS_X = A0;
+const int PIN_AXIS_Y = A1;
+
+const uint16_t DEBOUNCE_MS = 25;
+const int AXIS_CENTER_VAL_X = 333;
+const int AXIS_CENTER_VAL_Y = 330;
+const int AXIS_THRESHOLD  = 300;
+
+struct Button {
+  const char* name;
+  uint8_t pin;
+  bool hasInternalPullup;
+  int lastStable;
+  int lastRead;
+  uint32_t lastChangeMs;
+};
+
+Button buttons[] = {
+  {"UP",      PIN_UP,      false, HIGH, HIGH, 0},
+  {"RIGHT",   PIN_RIGHT,   false, HIGH, HIGH, 0},
+  {"DOWN",    PIN_DOWN,    false, HIGH, HIGH, 0},
+  {"LEFT",    PIN_LEFT,    false, HIGH, HIGH, 0},
+  {"START",   PIN_START,   true,  HIGH, HIGH, 0},
+  {"SELECT",  PIN_SELECT,  true,  HIGH, HIGH, 0},
+  {"ANALOG",  PIN_ANALOGB, true,  HIGH, HIGH, 0},
+};
+const size_t N_BUTTONS = sizeof(buttons)/sizeof(buttons[0]);
+
+void setupPinModes() {
+  // Configura os pinos digitais dos botões
+  for (size_t i = 0; i < N_BUTTONS; ++i) {
+    if (buttons[i].hasInternalPullup) {
+      pinMode(buttons[i].pin, INPUT_PULLUP);
+    } else {
+      pinMode(buttons[i].pin, INPUT);
+    }
+  }
 }
 
-void readButtons(){
-  
-  current_btn_a = !digitalRead(A);
-  current_btn_b = !digitalRead(B);
-  current_btn_c = !digitalRead(C);
-  current_btn_d = !digitalRead(D);
-  current_btn_e = !digitalRead(E);
-  current_btn_f = !digitalRead(F);
-  current_btn_k = !digitalRead(K);
-    
+void setup() {
+  Serial.begin(115200);
+  delay(200);
+  setupPinModes();
+  Serial.println("Joystick ESP32 iniciado.");
+  // Adicionar cabeçalho para facilitar a leitura dos dados seriais
+  Serial.println("UP,RIGHT,DOWN,LEFT,START,SELECT,ANALOG,DPAD_UP,DPAD_DOWN,DPAD_LEFT,DPAD_RIGHT");
+}
+
+void readButtons(int states[]) {
+  const uint32_t now = millis();
+
+  for (size_t i = 0; i < N_BUTTONS; ++i) {
+    Button &b = buttons[i];
+    int raw = digitalRead(b.pin);
+
+    if (raw != b.lastRead) {
+      b.lastRead = raw;
+      b.lastChangeMs = now;
+    }
+
+    if ((now - b.lastChangeMs) >= DEBOUNCE_MS) {
+      b.lastStable = raw;
+    }
+
+    states[i] = (b.lastStable == LOW) ? 1 : 0;
+  }
+}
+
+void readDPadFromAnalog(int dpadStates[]) {
+  int x = analogRead(PIN_AXIS_X);
+  int y = analogRead(PIN_AXIS_Y);
+
+  int xDelta = x - AXIS_CENTER_VAL_X;
+  int yDelta = y - AXIS_CENTER_VAL_Y;
+
+  bool up_active = false;
+  bool down_active = false;
+  bool left_active = false;
+  bool right_active = false;
+
+  if (yDelta < -AXIS_THRESHOLD) {
+    up_active = true;
+  } else if (yDelta > AXIS_THRESHOLD) {
+    down_active = true;
   }
 
-void setup() 
-{
-  pinMode(X, INPUT);
-  pinMode(Y, INPUT);
+  if (xDelta < -AXIS_THRESHOLD) {
+    left_active = true;
+  } else if (xDelta > AXIS_THRESHOLD) {
+    right_active = true;
+  }
+
+  dpadStates[0] = up_active ? 1 : 0;
+  dpadStates[1] = down_active ? 1 : 0;
+  dpadStates[2] = left_active ? 1 : 0;
+  dpadStates[3] = right_active ? 1 : 0;
+}
+
+void readAllStates(int allStates[]) {
+  // Lê os estados dos botões digitais
+  readButtons(allStates); 
   
-  for(int i = 2; i <= 8; i++) {
-    pinMode(i, INPUT_PULLUP);
- 
-  //logs
-  Serial.begin(115200);
-    }
+  // Lê os estados do D-Pad
+  int dpadStates[4]; // [UP, DOWN, LEFT, RIGHT]
+  readDPadFromAnalog(dpadStates);
+
+  // Consolida os estados do D-Pad no array
+  for (int i = 0; i < 4; ++i) {
+    allStates[7 + i] = dpadStates[i];  // Posições 7, 8, 9, 10 no array
+  }
+}
+
+void sendJoystickData(int allStates[]) {
+  Serial.print("J");  // Prefixo para indicar início de pacote
+  
+  // Envia os estados dos botões
+  for (int i = 0; i < 7; ++i) {
+    Serial.print(allStates[i]);
+    Serial.print(",");
+  }
+  
+  // Envia os estados do D-Pad
+  for (int i = 7; i < 11; ++i) {
+    Serial.print(allStates[i]);
+    Serial.print(",");
+  }
+
+  Serial.println();  // Finaliza a linha de dados
 }
 
 void loop() {
+  int allStates[11];  // 7 botões + 4 D-Pad
 
-  
-  readAnalogs();
-  readButtons();
+  // Lê todos os estados (botões + D-Pad)
+  readAllStates(allStates); 
 
-  //no liguem pros IFs, depois a eu otimizo o código ksksksksó
-  
-  // O "abs(diferença)" é pra evitar ruído do analógico
-  if (abs(current_x - last_x) > 4) {
-    Serial.print("X:");
-    Serial.println(current_x);
-    last_x = current_x; 
-  }
+  // Envia os dados através da serial
+  sendJoystickData(allStates); 
 
-  if (abs(current_y - last_y) > 4) {
-    Serial.print("Y:");
-    Serial.println(current_y);
-    last_y = current_y;
-  }
-  
-// Envia 1 para pressionado, 0 para solto
-  if (current_btn_a != last_btn_a) {
-    Serial.print("A:");
-    Serial.println(current_btn_a); 
-    last_btn_a = current_btn_a;
-  }
-  
-  if (current_btn_b != last_btn_b) {
-    Serial.print("B:");
-    Serial.println(current_btn_b);
-    last_btn_b = current_btn_b;
-  }
-
-  if (current_btn_c != last_btn_c) {
-    Serial.print("C:");
-    Serial.println(current_btn_c);
-    last_btn_c = current_btn_c;
-  }
-
-  if (current_btn_d != last_btn_d) {
-    Serial.print("D:");
-    Serial.println(current_btn_d);
-    last_btn_d = current_btn_d;
-  }
-  
-  if (current_btn_e != last_btn_e) {
-    Serial.print("E:");
-    Serial.println(current_btn_e);
-    last_btn_e = current_btn_e;
-  }
-
-  if (current_btn_f != last_btn_f) {
-    Serial.print("F:");
-    Serial.println(current_btn_f);
-    last_btn_f = current_btn_f;
-  }
-
-  if (current_btn_k != last_btn_k) {
-    Serial.print("K:");
-    Serial.println(current_btn_k);
-    last_btn_k = current_btn_k;
-  }
-  delay(10); 
+  delay(50); 
 }
