@@ -127,7 +127,8 @@ static int __init joy_driver_init(void) {
 }
 
 static void __exit joy_driver_exit(void) {
-    del_timer_sync(&joy_timer);
+    // del_timer_sync(&joy_timer);
+    timer_delete_sync(&joy_timer);
     input_unregister_device(joy_input_dev);
     printk(KERN_INFO "joy_driver_module: Module unloaded\n");
 }

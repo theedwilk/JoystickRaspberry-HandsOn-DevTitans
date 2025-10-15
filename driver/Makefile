@@ -1,17 +1,19 @@
-CC = gcc
-CFLAGS = -Wall -g
-test: main.o joy_driver.o
-	   $(CC) $(CFLAGS) main.o joy_driver.o -g -o test
+# Kbuild part of the Makefile
+# This specifies the kernel module to build
+obj-m += joy_driver_module.o
 
-%.o: %.c *.h
-	$(CC) $(CFLAGS) -c $< -o $@
-module:
-	make -C /lib/modules/$(shell uname -r)/build M=$(PWD) modules
+# Convenience targets for local compilation
+ifeq ($(KERNELRELEASE),)
 
-joy_driver_module.o: joy_driver_module.c
+KDIR ?= /lib/modules/$(shell uname -r)/build
+PWD := $(shell pwd)
+
+all:
+	$(MAKE) -C $(KDIR) M=$(PWD) modules
 
 clean:
-	rm -f *.o test *.ko
+	$(MAKE) -C $(KDIR) M=$(PWD) clean
 
-# Kernel module build rules
-obj-m += joy_driver_module.o
+.PHONY: all clean
+
+endif
