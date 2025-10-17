@@ -116,8 +116,8 @@ static int nesjoy_probe(struct platform_device *pdev)
     input->name = "NES Joystick (GPIO)";
     input->phys = "nesjoy/input0";
     input->id.bustype = BUS_HOST;
-    input->id.vendor  = 0x0001;
-    input->id.product = 0x00NES;
+    input->id.vendor  = 0x10C4;
+    input->id.product = 0xEA60;
     input->id.version = 0x0001;
 
     __set_bit(EV_KEY, input->evbit);
@@ -141,11 +141,15 @@ static int nesjoy_probe(struct platform_device *pdev)
     return 0;
 }
 
-static int nesjoy_remove(struct platform_device *pdev)
+//#if LINUX_VERSION_CODE >= KERNEL_VERSION(6, 1, 0)
+static void nesjoy_remove(struct platform_device *pdev)
+//#else
+//static int nesjoy_remove(struct platform_device *pdev)
+//#endif
 {
     struct nesjoy *nj = platform_get_drvdata(pdev);
     if (nj->thread) kthread_stop(nj->thread);
-    return 0;
+//    return 0;
 }
 
 static const struct of_device_id nesjoy_of_match[] = {
@@ -165,6 +169,6 @@ static struct platform_driver nesjoy_driver = {
 
 module_platform_driver(nesjoy_driver);
 
-MODULE_AUTHOR("Você");
+MODULE_AUTHOR("Alex Monteiro");
 MODULE_DESCRIPTION("Driver NES joystick via GPIO (11 bits com Push)");
 MODULE_LICENSE("GPL");
