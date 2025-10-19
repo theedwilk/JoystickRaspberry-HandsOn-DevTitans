@@ -57,11 +57,12 @@ Desenvolver um driver de Kernel do zero para integrar um protótipo de joystick 
 
 ## Contribuidores
 
-<img src="https://github.com/DevTITANS05/Hands-On-Linux-fork-/assets/21023906/85e61f3e-476c-47a4-82d5-4054e856c67b" width="180" >
-<img src="https://github.com/DevTITANS05/Hands-On-Linux-fork-/assets/21023906/85e61f3e-476c-47a4-82d5-4054e856c67b" width="180" >
-<img src="https://github.com/DevTITANS05/Hands-On-Linux-fork-/assets/21023906/85e61f3e-476c-47a4-82d5-4054e856c67b" width="180" >
-<img src="https://github.com/DevTITANS05/Hands-On-Linux-fork-/assets/21023906/85e61f3e-476c-47a4-82d5-4054e856c67b" width="180" >
-<img src="https://github.com/DevTITANS05/Hands-On-Linux-fork-/assets/21023906/85e61f3e-476c-47a4-82d5-4054e856c67b" width="180" >
+<img width="180" alt="Image" src="https://github.com/user-attachments/assets/cd796644-124d-4f5d-86b6-0a07714f4eb5" />
+<img width="180" alt="Image" src="https://github.com/user-attachments/assets/2f1e9279-9ed3-4f34-8fe9-330a9388f79f" />
+<img width="180" alt="Image" src="https://github.com/user-attachments/assets/312858b6-3417-4fa8-949f-00bbd2e49d95" />
+<img width="180" alt="Image" src="https://github.com/user-attachments/assets/0ace7fa6-2203-4dea-a51b-4a35c326c3aa" />
+<img width="180" alt="Image" src="https://github.com/user-attachments/assets/59bc0193-08d4-4aec-914f-1428d8985642" />
+<img width="180" alt="Image" src="https://github.com/user-attachments/assets/98943483-134f-4db8-89c8-ebe8bf0a6b99" />
 <img src="https://github.com/DevTITANS05/Hands-On-Linux-fork-/assets/21023906/85e61f3e-476c-47a4-82d5-4054e856c67b" width="180" >
 
 - **Nome do(a) Aluno(a) 01:** Desenvolvedor do Firmware e Mantenedor do Projeto
