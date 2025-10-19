@@ -63,13 +63,13 @@ Desenvolver um driver de Kernel do zero para integrar um protótipo de joystick 
 <img width="180" alt="Image" src="https://github.com/user-attachments/assets/0ace7fa6-2203-4dea-a51b-4a35c326c3aa" />
 <img width="180" alt="Image" src="https://github.com/user-attachments/assets/59bc0193-08d4-4aec-914f-1428d8985642" />
 <img width="180" alt="Image" src="https://github.com/user-attachments/assets/98943483-134f-4db8-89c8-ebe8bf0a6b99" />
-<img src="https://github.com/DevTITANS05/Hands-On-Linux-fork-/assets/21023906/85e61f3e-476c-47a4-82d5-4054e856c67b" width="180" >
 
-- **Nome do(a) Aluno(a) 01:** Desenvolvedor do Firmware e Mantenedor do Projeto
-- **Nome do(a) Aluno(a) 02:** Desenvolvedor do Firmware
-- **Nome do(a) Aluno(a) 03:** Desenvolvedor do Driver Linux
-- **Nome do(a) Aluno(a) 04:** Desenvolvedor do Driver Linux
-- **Nome do(a) Aluno(a) 05:** Desenvolvedor do Firmware e Escritor da Documentação
+- **Alex Monteiro:** Desenvolvedor do Hardware
+- **Jefferson Lima:** Desenvolvedor do Firmware
+- **Waldomiro Seabra:** Desenvolvedor do Driver Linux
+- **Bruno Solimôes:** Desenvolvedor do Aosp Product
+- **Stella Silva:** Desenvolvedor do Aosp e Escritora da Documentação
+- **Theed Wilk:** Desenvolvedor e Escritor da Documentação
 
 ## Introdução
 
