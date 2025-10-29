@@ -1,5 +1,5 @@
 
-#define TX_PIN      21
+#define TX_PIN      17
 
 
 uint16_t dataToWrite = 0;
