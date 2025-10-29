@@ -1,4 +1,7 @@
 
+#define TX_PIN      21
+
+
 uint16_t dataToWrite = 0;
 uint16_t ButonStatus = 0;
 
@@ -47,6 +50,7 @@ void setupPinModes() {
       pinMode(buttons[i].pin, INPUT);
     }
   }
+  pinMode(TX_PIN,OUTPUT);
 }
 
 void setup() {
@@ -122,7 +126,6 @@ void readAllStates(int allStates[]) {
   }
 }
 
-#define TX_PIN      21
 #define BAUD_RATE   9600 // Exemplo de taxa. Escolha a menor possível para maior estabilidade.
 
 // Calcula o tempo de um bit em microsegundos

@@ -33,11 +33,6 @@ static int rx_irq_num;
 #define delay_bit() udelay(BIT_TIME_US)
 #define delay_half_bit() udelay(BIT_TIME_US / 2)
 
-// Definições dos Pinos (usando numeração BCM)
-#define CHIP_NAME "gpiochip0"
-#define DATA_LINE_NUM   18  // BCM GPIO 18 (Dados)
-#define CLK_LINE_NUM    19  // BCM GPIO 19 (Clock)
-
 #define LOOP_INTERVAL_MS 10
 #define B_BUTTON_MASK 1
 #define A_BUTTON_MASK 1 << 1
