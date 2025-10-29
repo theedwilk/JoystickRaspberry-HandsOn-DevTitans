@@ -52,7 +52,7 @@ void setupPinModes() {
 }
 
 void setup() {
-  Serial.begin(115200);
+  Serial.begin(9600);
   delay(200);
   setupPinModes();
   Serial.println("Joystick ESP32 iniciado.");

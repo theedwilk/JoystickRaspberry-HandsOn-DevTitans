@@ -5,16 +5,16 @@
 uint16_t dataToWrite = 0;
 uint16_t ButonStatus = 0;
 
-const int PIN_UP      = 2;
-const int PIN_RIGHT   = 3;
-const int PIN_DOWN    = 4;
-const int PIN_LEFT    = 5;
-const int PIN_START   = 6;
-const int PIN_SELECT  = 7;
-const int PIN_ANALOGB = 8;
+const int PIN_UP      = 36;
+const int PIN_RIGHT   = 39;
+const int PIN_DOWN    = 34;
+const int PIN_LEFT    = 35;
+const int PIN_START   = 32;
+const int PIN_SELECT  = 33;
+const int PIN_ANALOGB = 25;
 
-const int PIN_AXIS_X = A0;
-const int PIN_AXIS_Y = A1;
+const int PIN_AXIS_X = 26;
+const int PIN_AXIS_Y = 27;
 
 const uint16_t DEBOUNCE_MS = 25;
 const int AXIS_CENTER_VAL_X = 333;
@@ -54,7 +54,7 @@ void setupPinModes() {
 }
 
 void setup() {
-  Serial.begin(115200);
+  Serial.begin(9600);
   delay(200);
   setupPinModes();
   Serial.println("Joystick ESP32 iniciado.");

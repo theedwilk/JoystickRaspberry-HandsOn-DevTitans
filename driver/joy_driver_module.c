@@ -18,7 +18,7 @@
 
 // === Definições ===
 #define DRV_NAME "esp32_uart_reader"
-#define RX_GPIO_NUM     21 // Exemplo de pino RPi GPIO (BCM)
+#define RX_GPIO_NUM     15 // Exemplo de pino RPi GPIO (BCM)
 #define BAUD_RATE       9600
 // Tempo de atraso de 1 bit (em nanosegundos), adaptado para o kernel
 #define BIT_TIME_NS     (1000000000L / BAUD_RATE)
