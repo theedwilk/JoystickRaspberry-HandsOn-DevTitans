@@ -1,3 +1,7 @@
+
+uint16_t dataToWrite = 0;
+uint16_t ButonStatus = 0;
+
 const int PIN_UP      = 2;
 const int PIN_RIGHT   = 3;
 const int PIN_DOWN    = 4;
@@ -118,7 +122,63 @@ void readAllStates(int allStates[]) {
   }
 }
 
+#define TX_PIN      21
+#define BAUD_RATE   9600 // Exemplo de taxa. Escolha a menor possível para maior estabilidade.
+
+// Calcula o tempo de um bit em microsegundos
+const int BIT_TIME_US = (1000000 / BAUD_RATE);
+
+// Máscara de Registrador para operação atômica
+const uint32_t TX_MASK = (1UL << TX_PIN);
+
+// Função auxiliar para atraso preciso (melhor que delayMicroseconds())
+// ets_delay_us é uma função de IRAM do ESP-IDF/Arduino-ESP32
+#define bit_delay() ets_delay_us(BIT_TIME_US)
+
+// Garante que a função rode na RAM de Instruções para latência mínima
+void IRAM_ATTR write_2_bytes_uart(uint16_t data) {
+    // O protocolo UART tipicamente envia: Start Bit (LOW), Data Bits, Stop Bit (HIGH)
+    
+    // Inverte a ordem dos bytes para ter o LSB primeiro (padrão UART)
+    uint32_t data_32 = data; 
+    
+    // 1. START BIT (LOW)
+    // Inicia a transmissão forçando o pino para LOW
+    //GPIO.out_w1tc = TX_MASK;
+    digitalWrite(TX_PIN,0);
+    bit_delay(); // Atraso do tempo de 1 bit
+
+    // 2. DATA BITS (8 bits por byte, 16 bits no total)
+    // Envia LSB primeiro (se o receptor espera 8N1)
+    for (int i = 0; i < 16; i++) {
+        if (data_32 & (1 << i)) {
+            // Bit é 1: Set (HIGH)
+            //GPIO.out_w1ts = TX_MASK;
+            digitalWrite(TX_PIN,1);
+        } else {
+            // Bit é 0: Clear (LOW)
+            //GPIO.out_w1tc = TX_MASK;
+            digitalWrite(TX_PIN,0);
+        }
+        bit_delay(); // Atraso do tempo de 1 bit
+    }
+
+    // 3. STOP BIT (HIGH)
+    // Sinaliza o fim da transmissão
+    //GPIO.out_w1ts = TX_MASK;
+    digitalWrite(TX_PIN,1);
+    bit_delay(); // Atraso do tempo de 1 bit
+}
+
 void sendJoystickData(int allStates[]) {
+  dataToWrite = 0;
+  for (int i = 0; i < 11; i++) {
+    if (allStates[i]) {
+      dataToWrite |= (1 << i);
+    }
+  }
+  write_2_bytes_uart(dataToWrite);
+  /*
   Serial.print("J");  // Prefixo para indicar início de pacote
   
   // Envia os estados dos botões
@@ -134,6 +194,7 @@ void sendJoystickData(int allStates[]) {
   }
 
   Serial.println();  // Finaliza a linha de dados
+  */
 }
 
 void loop() {
