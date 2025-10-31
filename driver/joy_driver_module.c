@@ -19,6 +19,8 @@
 // === Definições ===
 #define DRV_NAME "joy_driver_module"
 #define RX_GPIO_NUM     15 // Exemplo de pino RPi GPIO (BCM)
+#define GPIO_OFFSET 512
+#define DATA_GPIO RX_GPIO_NUM + GPIO_OFFSET
 #define BAUD_RATE       9600
 // Tempo de atraso de 1 bit (em nanosegundos), adaptado para o kernel
 #define BIT_TIME_NS     (1000000000L / BAUD_RATE)
@@ -143,7 +145,7 @@ static int uart_reader_init(void)
     
     // 1. Alocar e configurar o pino GPIO (gpiod)
     //rx_gpiod = gpiod_get_from_platform_data(NULL, "rx_line", 0);
-    rx_gpiod = gpio_to_desc(RX_GPIO_NUM);
+    rx_gpiod = gpio_to_desc(DATA_GPIO);
     if (rx_gpiod == NULL) {
         pr_err("%s: Falha ao obter GPIO RX\n", DRV_NAME);
         return PTR_ERR(rx_gpiod);
