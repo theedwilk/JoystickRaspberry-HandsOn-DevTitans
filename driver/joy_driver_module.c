@@ -20,13 +20,15 @@
 #define DRV_NAME "joy_driver_module"
 #define RX_GPIO_NUM     15 // Exemplo de pino RPi GPIO (BCM)
 #define GPIO_OFFSET 512
-#define DATA_GPIO RX_GPIO_NUM + GPIO_OFFSET
+#define DATA_GPIO 229
+#define CLK_GPIO 230
 #define BAUD_RATE       9600
 // Tempo de atraso de 1 bit (em nanosegundos), adaptado para o kernel
 #define BIT_TIME_NS     (1000000000L / BAUD_RATE)
 #define BIT_TIME_US     (1000000UL / BAUD_RATE)
 
 static struct gpio_desc *rx_gpiod;
+static struct gpio_desc *clk_gpiod;
 static int rx_irq_num;
 
 /* Prefer udelay() inside modules to avoid referencing architecture-specific
@@ -124,17 +126,32 @@ static uint16_t read_2_bytes_uart_module(void)
 // Manipulador de Interrupção para o Start Bit (Borda de Descida)
 static irqreturn_t rx_interrupt_handler(int irq, void *dev_id)
 {
-    // A interrupção detectou o Start Bit (transição HIGH -> LOW).
-    // O trabalho pesado (leitura bit a bit) deve ser delegado para evitar latência no IRQ.
-    
-    // Idealmente, você usaria uma Workqueue ou Thread Kernel, mas
-    // para um exemplo simples, chamamos a função de leitura que usa ndelay:
-    read_2_bytes_uart_module();
-    
-    // Após a leitura, o IRQ deve ser rearmado (o que já acontece por padrão
-    // se o pino não for reconfigurado, mas pode ser necessário desabilitar
-    // a interrupção temporariamente dependendo do design do hardware).
-    
+    // A interrupção é rápida; agendamos o trabalho real para um thread
+    // ou usamos um workqueue para evitar bloquear outros IRQs.
+    // Para simplificar, neste exemplo, forçamos a leitura aqui:
+    printk(KERN_INFO "joy_drive_module: interrupçao iniciada\n");
+    static int bit_counter = 0;
+    uint16_t received_data = 0;
+    if (bit_counter < 16) {
+        // 1. O dado é lido quando o CLK está em um estado (ex: subida)
+        int bit_val = gpiod_get_value(rx_gpiod);
+        
+        if (bit_val) {
+            received_data |= (1 << (15 - bit_counter)); // MSB primeiro
+        }
+        
+        // 2. Incrementa o contador
+        bit_counter++;
+        
+        if (bit_counter == 16) {
+            // Se 16 bits foram lidos, a leitura está completa
+            // Idealmente, você notificaria um thread do espaço do usuário aqui.
+            bit_counter = 0;
+            pr_info("%s: Dados Síncronos Recebidos: 0x%04X\n", DRV_NAME, received_data);
+            print_binary(received_data);
+        }
+        input_data = received_data;
+    }
     return IRQ_HANDLED;
 }
 
@@ -147,7 +164,8 @@ static int uart_reader_init(void)
     // 1. Alocar e configurar o pino GPIO (gpiod)
     //rx_gpiod = gpiod_get_from_platform_data(NULL, "rx_line", 0);
     rx_gpiod = gpio_to_desc(DATA_GPIO);
-    if (rx_gpiod == NULL) {
+    clk_gpiod = gpio_to_desc(CLK_GPIO);
+    if (rx_gpiod == NULL || clk_gpiod == NULL) {
         pr_err("%s: Falha ao obter GPIO RX\n", DRV_NAME);
         goto err_direction_rx;
     }
@@ -157,16 +175,16 @@ static int uart_reader_init(void)
     if (ret < 0) { goto err_direction_rx; }
 
     // 2. Obter o número IRQ
-    rx_irq_num = gpiod_to_irq(rx_gpiod);
+    rx_irq_num = gpiod_to_irq(clk_gpiod);
     if (rx_irq_num < 0) {
         pr_err("%s: Falha ao mapear GPIO para IRQ\n", DRV_NAME);
         ret = rx_irq_num;
         goto err_direction_rx;
     }
 
-    // // 3. Registrar o manipulador de IRQ para bordas de descida (Start Bit)
+    // // 3. Registrar o manipulador de IRQ para bordas de subida (Start Bit)
     ret = request_irq(rx_irq_num, rx_interrupt_handler, 
-                      IRQF_TRIGGER_FALLING | IRQF_SHARED, // Descida (Start Bit) + Compartilhável
+                      IRQF_TRIGGER_RISING | IRQF_SHARED, // Subida (Start Bit) + Compartilhável
                       DRV_NAME, (void *)DRV_NAME);
 
     if (ret) {
@@ -179,6 +197,7 @@ static int uart_reader_init(void)
 
 err_direction_rx:
     gpiod_put(rx_gpiod);
+    gpiod_put(clk_gpiod);
     return ret;
 }
 
@@ -186,6 +205,7 @@ static void uart_reader_exit(void)
 {
     free_irq(rx_irq_num, (void *)DRV_NAME);
     gpiod_put(rx_gpiod);
+    gpiod_put(clk_gpiod);
     pr_info("%s: Módulo descarregado.\n", DRV_NAME);
 }
 
@@ -224,7 +244,6 @@ static void joy_timer_func(struct timer_list *t) {
         state = DATA_OUTPUT;
     } else {
         processData();
-        print_binary(input_data);
         state = DATA_COLLECT;
     }
     mod_timer(&joy_timer, jiffies + msecs_to_jiffies(LOOP_INTERVAL_MS));
