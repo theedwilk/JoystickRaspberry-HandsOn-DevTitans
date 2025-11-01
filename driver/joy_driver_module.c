@@ -101,7 +101,8 @@ static uint16_t read_2_bytes_uart_module(void)
     delay_half_bit();
 
     // 3. Loop de leitura (16 bits)
-    for (int i = 0; i < 16; i++) { // LSB primeiro (padrão UART)
+    int i = 0;
+    for (i = 0; i < 16; i++) { // LSB primeiro (padrão UART)
         int bit_val = gpiod_get_value(rx_gpiod);
         
         if (bit_val == 1) {
@@ -255,7 +256,12 @@ static int __init joy_driver_init(void) {
     }
     timer_setup(&joy_timer, joy_timer_func, 0);
     mod_timer(&joy_timer, jiffies + msecs_to_jiffies(LOOP_INTERVAL_MS));
-    uart_reader_init();
+    error = uart_reader_init();
+    if (error) {
+        printk(KERN_ERR "joy_driver_module: Failed to register gpio\n");
+        input_free_device(joy_input_dev);
+        return error;
+    }
     printk(KERN_INFO "joy_driver_module: Module loaded\n");
     return 0;
 }
