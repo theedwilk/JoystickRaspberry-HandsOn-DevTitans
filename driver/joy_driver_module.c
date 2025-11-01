@@ -149,7 +149,7 @@ static int uart_reader_init(void)
     rx_gpiod = gpio_to_desc(DATA_GPIO);
     if (rx_gpiod == NULL) {
         pr_err("%s: Falha ao obter GPIO RX\n", DRV_NAME);
-        return PTR_ERR(rx_gpiod);
+        goto err_direction_rx;
     }
     
     // Configurar pino de dados como INPUT
