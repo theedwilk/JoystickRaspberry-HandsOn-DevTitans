@@ -1,5 +1,7 @@
 
-#define TX_PIN      17
+#define TX_PIN      5
+#define CLK_PIN     4
+#define SYNC_PIN    2
 
 
 uint16_t dataToWrite = 0;
@@ -50,7 +52,11 @@ void setupPinModes() {
       pinMode(buttons[i].pin, INPUT);
     }
   }
+  pinMode(CLK_PIN, OUTPUT);
   pinMode(TX_PIN,OUTPUT);
+  pinMode(SYNC_PIN,INPUT);
+  digitalWrite(CLK_PIN, LOW);
+  digitalWrite(TX_PIN, LOW);
 }
 
 void setup() {
@@ -139,38 +145,43 @@ const uint32_t TX_MASK = (1UL << TX_PIN);
 #define bit_delay() ets_delay_us(BIT_TIME_US)
 
 // Garante que a função rode na RAM de Instruções para latência mínima
-void IRAM_ATTR write_2_bytes_uart(uint16_t data) {
+void IRAM_ATTR write_2_bytes(uint16_t data) {
     // O protocolo UART tipicamente envia: Start Bit (LOW), Data Bits, Stop Bit (HIGH)
     
     // Inverte a ordem dos bytes para ter o LSB primeiro (padrão UART)
-    uint32_t data_32 = data; 
+    //uint32_t data_32 = data; 
     
     // 1. START BIT (LOW)
     // Inicia a transmissão forçando o pino para LOW
     //GPIO.out_w1tc = TX_MASK;
-    digitalWrite(TX_PIN,0);
-    bit_delay(); // Atraso do tempo de 1 bit
+    //digitalWrite(TX_PIN,0);
+    //bit_delay(); // Atraso do tempo de 1 bit
 
     // 2. DATA BITS (8 bits por byte, 16 bits no total)
     // Envia LSB primeiro (se o receptor espera 8N1)
     for (int i = 0; i < 16; i++) {
-        if (data_32 & (1 << i)) {
+        if (data & (1 << i)) {
             // Bit é 1: Set (HIGH)
             //GPIO.out_w1ts = TX_MASK;
-            digitalWrite(TX_PIN,1);
+            digitalWrite(TX_PIN,HIGH);
+            Serial.print("1");
         } else {
             // Bit é 0: Clear (LOW)
             //GPIO.out_w1tc = TX_MASK;
-            digitalWrite(TX_PIN,0);
+            digitalWrite(TX_PIN,LOW);
+            Serial.print("0");
         }
-        bit_delay(); // Atraso do tempo de 1 bit
+        digitalWrite(CLK_PIN,HIGH);
+        bit_delay();
+        digitalWrite(CLK_PIN,LOW);
     }
+    Serial.println();
 
     // 3. STOP BIT (HIGH)
     // Sinaliza o fim da transmissão
     //GPIO.out_w1ts = TX_MASK;
-    digitalWrite(TX_PIN,1);
-    bit_delay(); // Atraso do tempo de 1 bit
+    //digitalWrite(TX_PIN,1);
+    //bit_delay(); // Atraso do tempo de 1 bit
 }
 
 void sendJoystickData(int allStates[]) {
@@ -180,20 +191,21 @@ void sendJoystickData(int allStates[]) {
       dataToWrite |= (1 << i);
     }
   }
-  write_2_bytes_uart(dataToWrite);
+  write_2_bytes(dataToWrite);
+
   /*
   Serial.print("J");  // Prefixo para indicar início de pacote
   
   // Envia os estados dos botões
   for (int i = 0; i < 7; ++i) {
     Serial.print(allStates[i]);
-    //Serial.print(",");
+    Serial.print(",");
   }
   
   // Envia os estados do D-Pad
   for (int i = 7; i < 11; ++i) {
     Serial.print(allStates[i]);
-    //Serial.print(",");
+    Serial.print(",");
   }
 
   Serial.println();  // Finaliza a linha de dados
@@ -203,6 +215,11 @@ void sendJoystickData(int allStates[]) {
 void loop() {
   int allStates[11];  // 7 botões + 4 D-Pad
 
+  if (digitalRead(SYNC_PIN) == 0){
+    Serial.println("AWAITING MODULE START");
+    delay(50);
+    return;
+  }
   // Lê todos os estados (botões + D-Pad)
   readAllStates(allStates); 
 

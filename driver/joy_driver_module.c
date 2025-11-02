@@ -22,6 +22,7 @@
 #define GPIO_OFFSET 512
 #define DATA_GPIO 229
 #define CLK_GPIO 230
+#define SYNC_GPIO 228
 #define BAUD_RATE       9600
 // Tempo de atraso de 1 bit (em nanosegundos), adaptado para o kernel
 #define BIT_TIME_NS     (1000000000L / BAUD_RATE)
@@ -29,6 +30,7 @@
 
 static struct gpio_desc *rx_gpiod;
 static struct gpio_desc *clk_gpiod;
+static struct gpio_desc *sync_gpiod;
 static int rx_irq_num;
 
 /* Prefer udelay() inside modules to avoid referencing architecture-specific
@@ -80,10 +82,10 @@ static uint16_t previous_data = 0x0000;
 static void print_binary(uint16_t value) {
     char buf[16];
     int i;
-    for (i = 9; i >= 0; i--) {
-        buf[9 - i] = (value & (1 << i)) ? '1' : '0';
+    for (i = 14; i >= 0; i--) {
+        buf[14 - i] = (value & (1 << i)) ? '1' : '0';
     }
-    buf[10] = '\0';
+    buf[15] = '\0';
     printk(KERN_INFO "joy_driver_module: input_data = %s\n", buf);
 }
 
@@ -129,15 +131,14 @@ static irqreturn_t rx_interrupt_handler(int irq, void *dev_id)
     // A interrupção é rápida; agendamos o trabalho real para um thread
     // ou usamos um workqueue para evitar bloquear outros IRQs.
     // Para simplificar, neste exemplo, forçamos a leitura aqui:
-    printk(KERN_INFO "joy_drive_module: interrupçao iniciada\n");
     static int bit_counter = 0;
-    uint16_t received_data = 0;
+    static uint16_t received_data = 0;
     if (bit_counter < 16) {
         // 1. O dado é lido quando o CLK está em um estado (ex: subida)
         int bit_val = gpiod_get_value(rx_gpiod);
         
         if (bit_val) {
-            received_data |= (1 << (15 - bit_counter)); // MSB primeiro
+            received_data |= (1 << (bit_counter)); // MSB primeiro
         }
         
         // 2. Incrementa o contador
@@ -148,9 +149,10 @@ static irqreturn_t rx_interrupt_handler(int irq, void *dev_id)
             // Idealmente, você notificaria um thread do espaço do usuário aqui.
             bit_counter = 0;
             pr_info("%s: Dados Síncronos Recebidos: 0x%04X\n", DRV_NAME, received_data);
-            print_binary(received_data);
+            input_data = received_data;
+            received_data = 0;
+            //print_binary(received_data);
         }
-        input_data = received_data;
     }
     return IRQ_HANDLED;
 }
@@ -165,13 +167,17 @@ static int uart_reader_init(void)
     //rx_gpiod = gpiod_get_from_platform_data(NULL, "rx_line", 0);
     rx_gpiod = gpio_to_desc(DATA_GPIO);
     clk_gpiod = gpio_to_desc(CLK_GPIO);
-    if (rx_gpiod == NULL || clk_gpiod == NULL) {
+    sync_gpiod = gpio_to_desc(SYNC_GPIO);
+    if (rx_gpiod == NULL || clk_gpiod == NULL || sync_gpiod == NULL) {
         pr_err("%s: Falha ao obter GPIO RX\n", DRV_NAME);
         goto err_direction_rx;
     }
     
     // Configurar pino de dados como INPUT
     ret = gpiod_direction_input(rx_gpiod);
+    if (ret < 0) { goto err_direction_rx; }
+
+    ret = gpiod_direction_output(sync_gpiod,0);
     if (ret < 0) { goto err_direction_rx; }
 
     // 2. Obter o número IRQ
@@ -191,6 +197,8 @@ static int uart_reader_init(void)
         pr_err("%s: Falha ao registrar IRQ %d\n", DRV_NAME, rx_irq_num);
         goto err_direction_rx;
     }
+
+    gpiod_set_value(sync_gpiod, 1);
     
     pr_info("%s: Módulo carregado. Esperando Start Bit (IRQ %d)\n", DRV_NAME, rx_irq_num);
     return 0;
@@ -198,6 +206,7 @@ static int uart_reader_init(void)
 err_direction_rx:
     gpiod_put(rx_gpiod);
     gpiod_put(clk_gpiod);
+    gpiod_put(sync_gpiod);
     return ret;
 }
 
