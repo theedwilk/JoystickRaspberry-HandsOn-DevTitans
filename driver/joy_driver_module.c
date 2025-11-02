@@ -18,7 +18,6 @@
 
 // === Definições ===
 #define DRV_NAME "joy_driver_module"
-#define RX_GPIO_NUM     15 // Exemplo de pino RPi GPIO (BCM)
 #define GPIO_OFFSET 512
 #define DATA_GPIO 229
 #define CLK_GPIO 230
@@ -28,10 +27,10 @@
 #define BIT_TIME_NS     (1000000000L / BAUD_RATE)
 #define BIT_TIME_US     (1000000UL / BAUD_RATE)
 
-static struct gpio_desc *rx_gpiod;
+static struct gpio_desc *data_gpiod;
 static struct gpio_desc *clk_gpiod;
 static struct gpio_desc *sync_gpiod;
-static int rx_irq_num;
+static int data_irq_num;
 
 /* Prefer udelay() inside modules to avoid referencing architecture-specific
  * helper symbols like __bad_ndelay which are not exported on some kernels.
@@ -75,58 +74,11 @@ typedef enum {
 } State_t;
 
 static struct input_dev *joy_input_dev;
-static struct timer_list joy_timer;
 static uint16_t input_data = 0x0000;
 static uint16_t previous_data = 0x0000;
 
 
 static int lastSync = 1;
-
-static void print_binary(uint16_t value) {
-    char buf[16];
-    int i;
-    for (i = 14; i >= 0; i--) {
-        buf[14 - i] = (value & (1 << i)) ? '1' : '0';
-    }
-    buf[15] = '\0';
-    printk(KERN_INFO "joy_driver_module: input_data = %s\n", buf);
-}
-
-/**
- * Função principal para ler 2 bytes assíncronos (UART Bit-Banging).
- * NOTA: Esta função DEVE ser chamada de um contexto de Thread ou Workqueue
- * (não diretamente do IRQ Handler) pois ela usa atrasos longos.
- */
-static uint16_t read_2_bytes_uart_module(void)
-{
-    uint16_t received_data = 0;
-
-    // 1. Esperar a Borda de Descida do Start Bit (já assumido pelo IRQ)
-    // A função é chamada após a borda de descida.
-
-    // 2. Sincronização: Esperar o Meio Bit para ler no centro do primeiro bit de dados
-    delay_half_bit();
-
-    // 3. Loop de leitura (16 bits)
-    int i = 0;
-    for (i = 0; i < 16; i++) { // LSB primeiro (padrão UART)
-        int bit_val = gpiod_get_value(rx_gpiod);
-        
-        if (bit_val == 1) {
-            received_data |= (1 << i);
-        }
-        
-        // Esperar o tempo completo de um bit para ler o próximo
-        delay_bit();
-    }
-    
-    // O Stop Bit (HIGH) será ignorado, assumindo que o estado de repouso é HIGH.
-
-    pr_info("%s: Dados Assíncronos Lidos: 0x%04X\n", DRV_NAME, received_data);
-    print_binary(received_data);
-    input_data = received_data;
-    return received_data;
-}
 
 static void processData(void) {
     unsigned short changed_bits = input_data ^ previous_data;
@@ -144,7 +96,7 @@ static void processData(void) {
 
 
 // Manipulador de Interrupção para o Start Bit (Borda de Descida)
-static irqreturn_t rx_interrupt_handler(int irq, void *dev_id)
+static irqreturn_t data_interrupt_handler(int irq, void *dev_id)
 {
     // A interrupção é rápida; agendamos o trabalho real para um thread
     // ou usamos um workqueue para evitar bloquear outros IRQs.
@@ -152,7 +104,7 @@ static irqreturn_t rx_interrupt_handler(int irq, void *dev_id)
     static int bit_counter = 0;
     static uint16_t received_data = 0;
     // 1. O dado é lido quando o CLK está em um estado (ex: subida)
-    int bit_val = gpiod_get_value(rx_gpiod);
+    int bit_val = gpiod_get_value(data_gpiod);
 
     if (bit_val == 1) {
     	received_data |= 1 << bit_counter; // MSB primeiro
@@ -177,89 +129,63 @@ static irqreturn_t rx_interrupt_handler(int irq, void *dev_id)
 
 // === Funções de Inicialização e Limpeza do Módulo ===
 
-static int uart_reader_init(void)
+static int gpio_reader_init(void)
 {
     int ret;
     
     // 1. Alocar e configurar o pino GPIO (gpiod)
-    //rx_gpiod = gpiod_get_from_platform_data(NULL, "rx_line", 0);
-    rx_gpiod = gpio_to_desc(DATA_GPIO);
+    //data_gpiod = gpiod_get_from_platform_data(NULL, "data_line", 0);
+    data_gpiod = gpio_to_desc(DATA_GPIO);
     clk_gpiod = gpio_to_desc(CLK_GPIO);
     sync_gpiod = gpio_to_desc(SYNC_GPIO);
-    if (rx_gpiod == NULL || clk_gpiod == NULL || sync_gpiod == NULL) {
+    if (data_gpiod == NULL || clk_gpiod == NULL || sync_gpiod == NULL) {
         pr_err("%s: Falha ao obter GPIO RX\n", DRV_NAME);
         goto err_direction_rx;
     }
     
     // Configurar pino de dados como INPUT
-    ret = gpiod_direction_input(rx_gpiod);
+    ret = gpiod_direction_input(data_gpiod);
     if (ret < 0) { goto err_direction_rx; }
 
     ret = gpiod_direction_output(sync_gpiod,0);
     if (ret < 0) { goto err_direction_rx; }
 
     // 2. Obter o número IRQ
-    rx_irq_num = gpiod_to_irq(clk_gpiod);
-    if (rx_irq_num < 0) {
+    data_irq_num = gpiod_to_irq(clk_gpiod);
+    if (data_irq_num < 0) {
         pr_err("%s: Falha ao mapear GPIO para IRQ\n", DRV_NAME);
-        ret = rx_irq_num;
+        ret = data_irq_num;
         goto err_direction_rx;
     }
 
     // // 3. Registrar o manipulador de IRQ para bordas de subida (Start Bit)
-    ret = request_irq(rx_irq_num, rx_interrupt_handler, 
+    ret = request_irq(data_irq_num, data_interrupt_handler, 
                       IRQF_TRIGGER_RISING | IRQF_SHARED, // Subida (Start Bit) + Compartilhável
                       DRV_NAME, (void *)DRV_NAME);
 
     if (ret) {
-        pr_err("%s: Falha ao registrar IRQ %d\n", DRV_NAME, rx_irq_num);
+        pr_err("%s: Falha ao registrar IRQ %d\n", DRV_NAME, data_irq_num);
         goto err_direction_rx;
     }
 
     gpiod_set_value(sync_gpiod, lastSync);
     
-    pr_info("%s: Módulo carregado. Esperando Start Bit (IRQ %d)\n", DRV_NAME, rx_irq_num);
+    pr_info("%s: Módulo carregado. Esperando Start Bit (IRQ %d)\n", DRV_NAME, data_irq_num);
     return 0;
 
 err_direction_rx:
-    gpiod_put(rx_gpiod);
+    gpiod_put(data_gpiod);
     gpiod_put(clk_gpiod);
     gpiod_put(sync_gpiod);
     return ret;
 }
 
-static void uart_reader_exit(void)
+static void gpio_reader_exit(void)
 {
-    free_irq(rx_irq_num, (void *)DRV_NAME);
-    gpiod_put(rx_gpiod);
+    free_irq(data_irq_num, (void *)DRV_NAME);
+    gpiod_put(data_gpiod);
     gpiod_put(clk_gpiod);
     pr_info("%s: Módulo descarregado.\n", DRV_NAME);
-}
-
-static void readGpio(void) {
-    input_data = read_2_bytes_uart_module();
-    return;
-    static int currInput = 0;
-    uint16_t testInputList[] = {A_BUTTON_MASK,B_BUTTON_MASK,X_BUTTON_MASK,Y_BUTTON_MASK, UP_BUTTON_MASK,DOWN_BUTTON_MASK,LEFT_BUTTON_MASK,RIGHT_BUTTON_MASK,0x0000};
-    if (testInputList[currInput] == 0x0000) {
-        input_data = 0x0000;
-        currInput = 0;
-    } else {
-        input_data |= testInputList[currInput];
-        currInput++;
-    }
-}
-
-static void joy_timer_func(struct timer_list *t) {
-    static State_t state = DATA_COLLECT;
-    if (state == DATA_COLLECT) {
-        //readGpio();
-        state = DATA_OUTPUT;
-    } else {
-        processData();
-        state = DATA_COLLECT;
-    }
-    mod_timer(&joy_timer, jiffies + msecs_to_jiffies(LOOP_INTERVAL_MS));
 }
 
 static int __init joy_driver_init(void) {
@@ -286,9 +212,7 @@ static int __init joy_driver_init(void) {
         input_free_device(joy_input_dev);
         return error;
     }
-    //timer_setup(&joy_timer, joy_timer_func, 0);
-    //mod_timer(&joy_timer, jiffies + msecs_to_jiffies(LOOP_INTERVAL_MS));
-    error = uart_reader_init();
+    error = gpio_reader_init();
     if (error) {
         printk(KERN_ERR "joy_driver_module: Failed to register gpio\n");
         input_free_device(joy_input_dev);
@@ -299,10 +223,8 @@ static int __init joy_driver_init(void) {
 }
 
 static void __exit joy_driver_exit(void) {
-    // del_timer_sync(&joy_timer);
-    //timer_delete_sync(&joy_timer);
     input_unregister_device(joy_input_dev);
-    uart_reader_exit();
+    gpio_reader_exit();
     printk(KERN_INFO "joy_driver_module: Module unloaded\n");
 }
 

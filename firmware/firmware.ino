@@ -146,19 +146,6 @@ const uint32_t TX_MASK = (1UL << TX_PIN);
 
 // Garante que a função rode na RAM de Instruções para latência mínima
 void IRAM_ATTR write_2_bytes(uint16_t data) {
-    // O protocolo UART tipicamente envia: Start Bit (LOW), Data Bits, Stop Bit (HIGH)
-    
-    // Inverte a ordem dos bytes para ter o LSB primeiro (padrão UART)
-    //uint32_t data_32 = data; 
-    
-    // 1. START BIT (LOW)
-    // Inicia a transmissão forçando o pino para LOW
-    //GPIO.out_w1tc = TX_MASK;
-    //digitalWrite(TX_PIN,0);
-    //bit_delay(); // Atraso do tempo de 1 bit
-
-    // 2. DATA BITS (8 bits por byte, 16 bits no total)
-    // Envia LSB primeiro (se o receptor espera 8N1)
     static int lastSync = 0;
     int syncBit = digitalRead(SYNC_PIN);
     for (int i = 0; i < 16; i++) {
@@ -171,12 +158,10 @@ void IRAM_ATTR write_2_bytes(uint16_t data) {
         digitalWrite(CLK_PIN,LOW);
         if (data & (1 << i)) {
             // Bit é 1: Set (HIGH)
-            //GPIO.out_w1ts = TX_MASK;
             digitalWrite(TX_PIN,HIGH);
             Serial.print("1");
         } else {
             // Bit é 0: Clear (LOW)
-            //GPIO.out_w1tc = TX_MASK;
             digitalWrite(TX_PIN,LOW);
             Serial.print("0");
         }
@@ -184,12 +169,6 @@ void IRAM_ATTR write_2_bytes(uint16_t data) {
         digitalWrite(CLK_PIN,HIGH);
     }
     Serial.println();
-
-    // 3. STOP BIT (HIGH)
-    // Sinaliza o fim da transmissão
-    //GPIO.out_w1ts = TX_MASK;
-    //digitalWrite(TX_PIN,1);
-    //bit_delay(); // Atraso do tempo de 1 bit
 }
 
 void sendJoystickData(int allStates[]) {
@@ -200,24 +179,6 @@ void sendJoystickData(int allStates[]) {
     }
   }
   write_2_bytes(dataToWrite);
-
-  /*
-  Serial.print("J");  // Prefixo para indicar início de pacote
-  
-  // Envia os estados dos botões
-  for (int i = 0; i < 7; ++i) {
-    Serial.print(allStates[i]);
-    Serial.print(",");
-  }
-  
-  // Envia os estados do D-Pad
-  for (int i = 7; i < 11; ++i) {
-    Serial.print(allStates[i]);
-    Serial.print(",");
-  }
-
-  Serial.println();  // Finaliza a linha de dados
-  */
 }
 
 void loop() {
