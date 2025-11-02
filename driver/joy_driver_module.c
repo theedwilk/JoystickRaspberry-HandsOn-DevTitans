@@ -79,6 +79,9 @@ static struct timer_list joy_timer;
 static uint16_t input_data = 0x0000;
 static uint16_t previous_data = 0x0000;
 
+
+static int lastSync = 1;
+
 static void print_binary(uint16_t value) {
     char buf[16];
     int i;
@@ -125,6 +128,21 @@ static uint16_t read_2_bytes_uart_module(void)
     return received_data;
 }
 
+static void processData(void) {
+    unsigned short changed_bits = input_data ^ previous_data;
+    size_t i;
+    for (i = 0; i < ARRAY_SIZE(buttons); i++) {
+        unsigned short mask = buttons[i].bit;
+        if (changed_bits & mask) {
+            int button_is_pressed = (input_data & mask) != 0;
+            input_report_key(joy_input_dev, buttons[i].code, button_is_pressed);
+        }
+    }
+    input_sync(joy_input_dev);
+    previous_data = input_data;
+}
+
+
 // Manipulador de Interrupção para o Start Bit (Borda de Descida)
 static irqreturn_t rx_interrupt_handler(int irq, void *dev_id)
 {
@@ -133,27 +151,27 @@ static irqreturn_t rx_interrupt_handler(int irq, void *dev_id)
     // Para simplificar, neste exemplo, forçamos a leitura aqui:
     static int bit_counter = 0;
     static uint16_t received_data = 0;
-    if (bit_counter < 16) {
-        // 1. O dado é lido quando o CLK está em um estado (ex: subida)
-        int bit_val = gpiod_get_value(rx_gpiod);
-        
-        if (bit_val) {
-            received_data |= (1 << (bit_counter)); // MSB primeiro
-        }
-        
-        // 2. Incrementa o contador
-        bit_counter++;
-        
-        if (bit_counter == 16) {
-            // Se 16 bits foram lidos, a leitura está completa
-            // Idealmente, você notificaria um thread do espaço do usuário aqui.
-            bit_counter = 0;
-            pr_info("%s: Dados Síncronos Recebidos: 0x%04X\n", DRV_NAME, received_data);
-            input_data = received_data;
-            received_data = 0;
-            //print_binary(received_data);
-        }
+    // 1. O dado é lido quando o CLK está em um estado (ex: subida)
+    int bit_val = gpiod_get_value(rx_gpiod);
+
+    if (bit_val == 1) {
+    	received_data |= 1 << bit_counter; // MSB primeiro
     }
+    // 2. Incrementa o contador
+    bit_counter++;
+
+    if (bit_counter == 16) {
+	    // Se 16 bits foram lidos, a leitura está completa
+	    // Idealmente, você notificaria um thread do espaço do usuário aqui.
+	    bit_counter = 0;
+	    pr_info("%s: Dados Síncronos Recebidos: %d = 0x%04X\n", DRV_NAME, received_data, received_data);
+	    input_data = received_data;
+	    processData();
+	    received_data = 0;
+	    //print_binary(received_data);
+    }
+    lastSync = !lastSync;
+    gpiod_set_value(sync_gpiod, lastSync);
     return IRQ_HANDLED;
 }
 
@@ -198,7 +216,7 @@ static int uart_reader_init(void)
         goto err_direction_rx;
     }
 
-    gpiod_set_value(sync_gpiod, 1);
+    gpiod_set_value(sync_gpiod, lastSync);
     
     pr_info("%s: Módulo carregado. Esperando Start Bit (IRQ %d)\n", DRV_NAME, rx_irq_num);
     return 0;
@@ -230,20 +248,6 @@ static void readGpio(void) {
         input_data |= testInputList[currInput];
         currInput++;
     }
-}
-
-static void processData(void) {
-    unsigned short changed_bits = input_data ^ previous_data;
-    size_t i;
-    for (i = 0; i < ARRAY_SIZE(buttons); i++) {
-        unsigned short mask = buttons[i].bit;
-        if (changed_bits & mask) {
-            int button_is_pressed = (input_data & mask) != 0;
-            input_report_key(joy_input_dev, buttons[i].code, button_is_pressed);
-        }
-    }
-    input_sync(joy_input_dev);
-    previous_data = input_data;
 }
 
 static void joy_timer_func(struct timer_list *t) {
@@ -282,8 +286,8 @@ static int __init joy_driver_init(void) {
         input_free_device(joy_input_dev);
         return error;
     }
-    timer_setup(&joy_timer, joy_timer_func, 0);
-    mod_timer(&joy_timer, jiffies + msecs_to_jiffies(LOOP_INTERVAL_MS));
+    //timer_setup(&joy_timer, joy_timer_func, 0);
+    //mod_timer(&joy_timer, jiffies + msecs_to_jiffies(LOOP_INTERVAL_MS));
     error = uart_reader_init();
     if (error) {
         printk(KERN_ERR "joy_driver_module: Failed to register gpio\n");
@@ -296,7 +300,7 @@ static int __init joy_driver_init(void) {
 
 static void __exit joy_driver_exit(void) {
     // del_timer_sync(&joy_timer);
-    timer_delete_sync(&joy_timer);
+    //timer_delete_sync(&joy_timer);
     input_unregister_device(joy_input_dev);
     uart_reader_exit();
     printk(KERN_INFO "joy_driver_module: Module unloaded\n");

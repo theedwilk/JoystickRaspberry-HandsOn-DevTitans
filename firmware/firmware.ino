@@ -159,7 +159,16 @@ void IRAM_ATTR write_2_bytes(uint16_t data) {
 
     // 2. DATA BITS (8 bits por byte, 16 bits no total)
     // Envia LSB primeiro (se o receptor espera 8N1)
+    static int lastSync = 0;
+    int syncBit = digitalRead(SYNC_PIN);
     for (int i = 0; i < 16; i++) {
+        while(syncBit == lastSync) {
+          bit_delay();
+          syncBit = digitalRead(SYNC_PIN);
+        }
+        lastSync = syncBit;
+        bit_delay();
+        digitalWrite(CLK_PIN,LOW);
         if (data & (1 << i)) {
             // Bit é 1: Set (HIGH)
             //GPIO.out_w1ts = TX_MASK;
@@ -171,9 +180,8 @@ void IRAM_ATTR write_2_bytes(uint16_t data) {
             digitalWrite(TX_PIN,LOW);
             Serial.print("0");
         }
-        digitalWrite(CLK_PIN,HIGH);
         bit_delay();
-        digitalWrite(CLK_PIN,LOW);
+        digitalWrite(CLK_PIN,HIGH);
     }
     Serial.println();
 
@@ -214,17 +222,11 @@ void sendJoystickData(int allStates[]) {
 
 void loop() {
   int allStates[11];  // 7 botões + 4 D-Pad
-
-  if (digitalRead(SYNC_PIN) == 0){
-    Serial.println("AWAITING MODULE START");
-    delay(50);
-    return;
-  }
   // Lê todos os estados (botões + D-Pad)
   readAllStates(allStates); 
 
   // Envia os dados através da serial
   sendJoystickData(allStates); 
-
+   
   delay(50); 
 }
