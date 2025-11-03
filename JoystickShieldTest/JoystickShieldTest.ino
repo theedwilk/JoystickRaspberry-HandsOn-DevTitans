@@ -1,3 +1,26 @@
+//ESP PINS
+
+
+//#define TX_PIN      5
+//#define CLK_PIN     4
+//#define SYNC_PIN    2
+//
+//
+//uint16_t dataToWrite = 0;
+//uint16_t ButonStatus = 0;
+//
+//const int PIN_UP      = 36;
+//const int PIN_RIGHT   = 39;
+//const int PIN_DOWN    = 34;
+//const int PIN_LEFT    = 35;
+//const int PIN_START   = 32;
+//const int PIN_SELECT  = 33;
+//const int PIN_ANALOGB = 25;
+//
+//const int PIN_AXIS_X = 26;
+//const int PIN_AXIS_Y = 27;
+
+//ARDUINO PINS
 
 #define   X    A0  //Analogico Horizontal
 #define   Y    A1  //Analogico Vertical
