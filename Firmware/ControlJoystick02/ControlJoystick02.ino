@@ -33,6 +33,7 @@ Button buttons[] = {
   {"ANALOG",  PIN_ANALOGB, true,  HIGH, HIGH, 0},
 };
 const size_t N_BUTTONS = sizeof(buttons)/sizeof(buttons[0]);
+int lastStates[11] = {0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0};
 
 void setupPinModes() {
   // Configura os pinos digitais dos botões
@@ -137,13 +138,31 @@ void sendJoystickData(int allStates[]) {
 }
 
 void loop() {
-  int allStates[11];  // 7 botões + 4 D-Pad
-
-  // Lê todos os estados (botões + D-Pad)
+int allStates[11]; // 7 botões + 4 D-Pad
+  
+  // 1. Lê todos os estados atuais
   readAllStates(allStates); 
 
-  // Envia os dados através da serial
-  sendJoystickData(allStates); 
+  // 2. Verifica se algo mudou
+  bool stateChanged = false;
+  for (int i = 0; i < 11; i++) {
+    if (allStates[i] != lastStates[i]) {
+      stateChanged = true;
+      break; // Encontrou uma mudança, não precisa checar o resto
+    }
+  }
 
-  delay(50); 
+  // 3. Só envia se o estado mudou
+  if (stateChanged) {
+    // Envia os novos dados
+    sendJoystickData(allStates); 
+    
+    // Atualiza o "último estado" com os dados que acabamos de enviar
+    for (int i = 0; i < 11; i++) {
+      lastStates[i] = allStates[i];
+    }
+  }
+
+  // Mantenha um pequeno delay para não sobrecarregar o loop
+  delay(10); 
 }
