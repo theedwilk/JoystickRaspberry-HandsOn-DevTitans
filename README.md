@@ -73,113 +73,159 @@ Desenvolver um driver de Kernel do zero para integrar um protótipo de joystick 
 
 ## Introdução
 
-Este projeto serve como um exemplo para desenvolvedores interessados em construir e integrar soluções de hardware personalizadas com sistemas Linux. Inclui os seguintes componentes:
-- Firmware para o microcontrolador ESP32 para lidar com operações específicas do dispositivo.
-- Um driver do kernel Linux que se comunica com o dispositivo ESP32, permitindo troca de dados e controle.
+O projeto **Joystick Raspberry — HandsOn DevTitans** propõe a integração direta entre um **joystick físico controlado por um ESP32** e o **Android Open Source Project (AOSP)** executando em um **Raspberry Pi 4B**.  
+
+O sistema foi desenvolvido do zero, abrangendo desde o **firmware do ESP32**, responsável pela leitura dos botões e eixos, até o **driver de kernel Linux**, que traduz os sinais elétricos em **eventos de input reconhecidos pelo Android**.
+
+A comunicação entre os dispositivos é realizada via **GPIO** utilizando um **protocolo síncrono de 16 bits** com três sinais principais (`TX`, `CLK`, `SYNC`).
+
+> O resultado final é um joystick funcional detectado automaticamente pelo Android, sem necessidade de aplicativos intermediários.
+
+---
 
 ## Recursos
 
-- **Firmware ESP32:**
-  - Aquisição básica de dados de sensores.
-  - Comunicação via Serial com o driver Linux.
-  
-- **Driver do Kernel Linux:**
-  - Rotinas de inicialização e limpeza.
-  - Operações de arquivo de dispositivo (`GET_LED`, `SET_LED`, `GET_LDR`).
-  - Comunicação com o ESP32 via Serial.
+###  Firmware (ESP32)
+- Leitura de **7 botões digitais** e **2 eixos analógicos (X/Y)**.  
+- Aplicação de **debounce por software** para eliminar ruído elétrico.  
+- Geração de **D-Pad digital** a partir dos eixos analógicos.  
+- Envio de **pacote de 16 bits via GPIO (TX/CLK/SYNC)**.  
+- Compatível com a arquitetura ESP32 Node32s.  
+
+###  Driver de Kernel (Linux)
+- Implementado em C como **módulo de kernel (`joy_driver_module.c`)**.  
+- Leitura dos bits via **interrupção no pino de clock (IRQ)**.  
+- Conversão automática em eventos `EV_KEY` e `EV_SYN`.  
+- Registro no **Linux Input Subsystem**, reconhecido pelo Android InputFlinger.  
+
+###  Integração com o AOSP
+- Compilação completa do **Android 16.0** (AOSP) para **Raspberry Pi 4B**.  
+- Inclusão do driver `.ko` no kernel (`common-modules/virtual-device`).  
+- Reconhecimento automático do joystick na camada Android.  
+
+---
 
 ## Requisitos
 
-- **Hardware:**
-  - Placa de Desenvolvimento ESP32
-  - Máquina Linux
-  - Protoboard e Cabos Jumper
-  - Sensor LDR
-  
-- **Software:**
-  - Arduino IDE
-  - Kernel Linux 4.0 ou superior
-  - GCC 4.8 ou superior
-  - Make 3.81 ou superior
+###  Hardware
+| Componente | Função |
+|-------------|--------|
+| Raspberry Pi 4B | Executa o AOSP e o driver de kernel |
+| ESP32 Node32s | Controla os botões e envia os dados via GPIO |
+| Joystick Shield / Botões físicos | Interface do usuário |
+| Protoboard e jumpers | Conexões elétricas |
+| Cartão microSD (mín. 32 GB) | Armazenamento da imagem Android |
+| Fonte de 5V / 3A | Alimentação estável |
+
+###  Software
+| Software | Versão Recomendada |
+|-----------|--------------------|
+| Ubuntu 22.04 LTS | Ambiente de compilação |
+| Arduino IDE | 2.0+ |
+| Toolchain AOSP | Android 16.0 / RPi4 |
+| Make / GCC | 4.8+ |
+| Git e Repo Tools | Última versão |
+
+---
 
 ## Configuração de Hardware
 
-1. **Conecte o ESP32 à sua Máquina Linux:**
-    - Use um cabo USB.
-    - Conecte os sensores ao ESP32 conforme especificado no firmware.
+Conexões entre **ESP32** e **Raspberry Pi 4B**:
 
-2. **Garanta a alimentação e conexões adequadas:**
-    - Use um protoboard e cabos jumper para montar o circuito.
-    - Consulte o diagrama esquemático fornecido no diretório `esp32` para conexões detalhadas.
+| Sinal (ESP32) | Pino (GPIO) no Raspberry | Direção | Função |
+|----------------|--------------------------|----------|--------|
+| TX_PIN (5) | DATA_GPIO (229) | ESP32 → RPi | Transmissão de dados bit a bit |
+| CLK_PIN (4) | CLK_GPIO (230) | ESP32 → RPi | Pulso de clock |
+| SYNC_PIN (2) | SYNC_GPIO (228) | RPi → ESP32 | Sinal de sincronização |
+
+> Os botões e eixos analógicos são conectados diretamente aos pinos de entrada do ESP32 (36–39, 32–35, 25–27).  
+> Consulte o arquivo `firmware/firmware.ino` para o mapeamento completo.
+
+---
 
 ## Instalação
 
-### Firmware ESP32
+### Firmware no ESP32
 
-1. **Abra o Arduino IDE e carregue o firmware:**
-    ```sh
-    Arquivo -> Abrir -> Selecione `smartlamp.ino`
-    ```
+1. Abra o **Arduino IDE** e carregue `firmware/firmware.ino`.  
+2. Configure a placa e porta:
 
-2. **Configure a Placa e a Porta:**
-    ```sh
-    Ferramentas -> Placa -> Node32s
-    Ferramentas -> Porta -> Selecione a porta apropriada
-    ```
+Ferramentas → Placa → Node32s
+Ferramentas → Porta → /dev/ttyUSB0 
 
-3. **Carregue o Firmware:**
-    ```sh
-    Sketch -> Upload (Ctrl+U)
-    ```
+3. Compile e envie:
+Sketch → Upload (Ctrl + U)
 
-### Driver Linux
+O ESP32 exibirá no Serial Monitor:
+Joystick ESP32 iniciado.
+UP,RIGHT,DOWN,LEFT,START,SELECT,ANALOG,DPAD_UP,DPAD_DOWN,DPAD_LEFT,DPAD_RIGHT
 
-1. **Clone o Repositório:**
-    ```sh
-    git clone https://github.com/seuusuario/Hands-On-Linux.git
-    cd Hands-On-Linux
-    ```
 
-2. **Compile o Driver:**
-    ```sh
-    cd smartlamp-kernel-module
-    make
-    ```
+---
 
-3. **Carregue o Driver:**
-    ```sh
-    sudo insmod smartlamp.ko
-    ```
+### Compilação do Driver no Kernel
 
-4. **Verifique o Driver:**
-    ```sh
-    dmesg | tail
-    ```
+1. Copie o arquivo `driver/joy_driver_module.c` para o diretório de módulos do AOSP:
+```
+~/kernel-aosprasp/common-modules/virtual-device/nesjoy/
+```
+---
+
+2. Edite `BUILD.bazel` e adicione:
+
+```
+ddk_module(
+    name = "aarch64/nesjoy",
+    srcs = [":nesjoy"],
+    out = "nesjoy.ko",
+    kernel_build = ":virtual_device_aarch64",
+    deps = [":common_headers"],
+)
+```
+
+---
+
+3. Compile o kernel:
+```
+cd ~/kernel-aosprasp
+time tools/bazel run //common-modules/virtual-device:virtual_device_aarch64_dist
+```
+---
+
+4. Copie o .ko para o AOSP:
+```
+cp out/virtual-device_aarch64/dist/nesjoy.ko ~/aosp-raspberry/kernel/nesjoy/
+```
+---
+
+### Recompilando o AOSP com o Driver
+
+1. Configure o ambienteTeste os eventos:Teste os eventos:
+2. Compile o sistema
+3. Grave a imagem gerada no cartão SD usando o Raspberry Pi Imager.
 
 ## Uso
 
-Depois que o driver e o firmware estiverem configurados, você poderá interagir com o dispositivo ESP32 através do sistema Linux.
+Após o boot do Android no Raspberry Pi:
 
-- **Escrever para o Dispositivo:**
-    ```sh
-    echo "100" > /sys/kernel/smartlamp/led
-    ```
+```
+insmod /vendor/lib/modules/nesjoy.ko
+```
 
-- **Ler do Dispositivo:**
-    ```sh
-    cat /sys/kernel/smartlamp/led
-    ```
+Verifique o registro do dispositivo:
 
-- **Verificar Mensagens do Driver:**
-    ```sh
-    dmesg | tail
-    ```
+```
+dmesg | grep nesjoy
+```
 
-- **Remover o Driver:**
-    ```sh
-    sudo rmmod smartlamp
-    ```
-    
-## Contato
+O joystick será reconhecido automaticamente pelo Android:
 
-Para perguntas, sugestões ou feedback, entre em contato com o mantenedor do projeto em [maintainer@example.com](mailto:maintainer@example.com).
+```
+/dev/input/js0
+```
+
+Teste os eventos:
+
+```
+getevent -lt /dev/input/event*
+```
