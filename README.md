@@ -229,3 +229,20 @@ Teste os eventos:
 ```
 getevent -lt /dev/input/event*
 ```
+
+
+## Anexos
+
+- Comportamento observado no Serial Monitor:
+  
+![serial monitor](https://github.com/user-attachments/assets/dace52ba-c4a2-4d92-9e1c-fc64399601b9)
+
+![projeto](https://github.com/user-attachments/assets/bb3e4405-f959-49e2-98fb-4c90e794151a)
+
+- Testes e Logs
+
+<img width="2880" height="1626" alt="logs" src="https://github.com/user-attachments/assets/d00ff4bd-0f98-4e0c-b356-9f47fe6bd050" />
+
+- Testes no AOSP / Raspberry Pi (Carregando o módulo via ADB)
+
+  ![projeto 2](https://github.com/user-attachments/assets/9f09ace0-3f4c-45ec-88a6-0f945279f209)
