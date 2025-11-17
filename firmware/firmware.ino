@@ -182,7 +182,7 @@ void sendJoystickData(int allStates[]) {
 }
 
 void loop() {
-  int allStates[11];  // 7 botões + 4 D-Pad
+  int allStates[10];  // 7 botões + 4 D-Pad
   // Lê todos os estados (botões + D-Pad)
   readAllStates(allStates); 
 
