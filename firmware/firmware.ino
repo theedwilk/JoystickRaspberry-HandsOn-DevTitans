@@ -172,13 +172,17 @@ void IRAM_ATTR write_2_bytes(uint16_t data) {
 }
 
 void sendJoystickData(int allStates[]) {
+  static uint16_t lastSent = 0;
   dataToWrite = 0;
-  for (int i = 0; i < 11; i++) {
+  for (int i = 0; i < 10; i++) {
     if (allStates[i]) {
       dataToWrite |= (1 << i);
     }
   }
-  write_2_bytes(dataToWrite);
+  if (lastSent != dataToWrite) {
+    lastSent = dataToWrite;
+    write_2_bytes(dataToWrite);
+  }
 }
 
 void loop() {
