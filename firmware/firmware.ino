@@ -33,13 +33,13 @@ struct Button {
 };
 
 Button buttons[] = {
-  {"UP",      PIN_UP,      false, HIGH, HIGH, 0},
   {"RIGHT",   PIN_RIGHT,   false, HIGH, HIGH, 0},
   {"DOWN",    PIN_DOWN,    false, HIGH, HIGH, 0},
+  {"UP",      PIN_UP,      false, HIGH, HIGH, 0},
   {"LEFT",    PIN_LEFT,    false, HIGH, HIGH, 0},
-  {"START",   PIN_START,   true,  HIGH, HIGH, 0},
   {"SELECT",  PIN_SELECT,  true,  HIGH, HIGH, 0},
-  {"ANALOG",  PIN_ANALOGB, true,  HIGH, HIGH, 0},
+  {"START",   PIN_START,   true,  HIGH, HIGH, 0},
+  //'{"ANALOG",  PIN_ANALOGB, true,  HIGH, HIGH, 0},
 };
 const size_t N_BUTTONS = sizeof(buttons)/sizeof(buttons[0]);
 
@@ -112,10 +112,10 @@ void readDPadFromAnalog(int dpadStates[]) {
     right_active = true;
   }
 
-  dpadStates[0] = up_active ? 1 : 0;
-  dpadStates[1] = down_active ? 1 : 0;
-  dpadStates[2] = left_active ? 1 : 0;
-  dpadStates[3] = right_active ? 1 : 0;
+  dpadStates[0] = down_active ? 1 : 0;
+  dpadStates[1] = right_active ? 1 : 0;
+  dpadStates[2] = up_active ? 1 : 0;
+  dpadStates[3] = left_active ? 1 : 0;
 }
 
 void readAllStates(int allStates[]) {
