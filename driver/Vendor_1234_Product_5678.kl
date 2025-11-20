@@ -1,0 +1,43 @@
+# Layout para Driver GPIO Xbox Customizado (Vendor 1234, Product 5678)
+
+# --- Botões de Face (Face Buttons) ---
+# Linux BTN_SOUTH (304) -> Android BUTTON_A (Botão de baixo)
+key 304   BUTTON_A
+
+# Linux BTN_EAST (305) -> Android BUTTON_B (Botão da direita)
+key 305   BUTTON_B
+
+# Linux BTN_NORTH (307) -> Android BUTTON_Y (Botão de cima)
+key 307   BUTTON_Y
+
+# Linux BTN_WEST (308) -> Android BUTTON_X (Botão da esquerda)
+key 308   BUTTON_X
+
+# --- Botões de Navegação ---
+# Linux BTN_SELECT (314) -> Android BUTTON_SELECT
+key 314   BUTTON_SELECT
+
+# Linux BTN_START (315) -> Android BUTTON_START
+key 315   BUTTON_START
+
+# Linux BTN_MODE (316) -> Android BUTTON_MODE (Botão Home/Guide)
+key 316   BUTTON_MODE
+
+# --- Ombros (Shoulders) ---
+# Linux BTN_TL (310) -> Android BUTTON_L1
+key 310   BUTTON_L1
+
+# Linux BTN_TR (311) -> Android BUTTON_R1
+key 311   BUTTON_R1
+
+# --- D-Pad (Direcionais) ---
+# Como seu driver emite sinais de botão para o D-Pad:
+key 544   DPAD_UP
+key 545   DPAD_DOWN
+key 546   DPAD_LEFT
+key 547   DPAD_RIGHT
+
+# --- Analógicos (Clicáveis / L3 e R3) ---
+# Caso adicione suporte a clique nos analógicos futuramente:
+key 317   BUTTON_THUMBL
+key 318   BUTTON_THUMBR
