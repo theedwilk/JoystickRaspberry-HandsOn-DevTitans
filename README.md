@@ -167,7 +167,7 @@ UP,RIGHT,DOWN,LEFT,START,SELECT,ANALOG,DPAD_UP,DPAD_DOWN,DPAD_LEFT,DPAD_RIGHT
 
 1. Copie o arquivo `driver/joy_driver_module.c` para o diretório de módulos do AOSP:
 ```
-~/kernel-aosprasp/common-modules/virtual-device/nesjoy/
+~/kernel-aosprasp/common-modules/virtual-device/joy_driver_module/
 ```
 ---
 
@@ -175,9 +175,9 @@ UP,RIGHT,DOWN,LEFT,START,SELECT,ANALOG,DPAD_UP,DPAD_DOWN,DPAD_LEFT,DPAD_RIGHT
 
 ```
 ddk_module(
-    name = "aarch64/nesjoy",
-    srcs = [":nesjoy"],
-    out = "nesjoy.ko",
+    name = "aarch64/joy_driver_module",
+    srcs = [":joy_driver_module"],
+    out = "joy_driver_module.ko",
     kernel_build = ":virtual_device_aarch64",
     deps = [":common_headers"],
 )
@@ -194,7 +194,7 @@ time tools/bazel run //common-modules/virtual-device:virtual_device_aarch64_dist
 
 4. Copie o .ko para o AOSP:
 ```
-cp out/virtual-device_aarch64/dist/nesjoy.ko ~/aosp-raspberry/kernel/nesjoy/
+cp out/virtual-device_aarch64/dist/joy_driver_module.ko ~/aosp-raspberry/kernel/joy_driver_module/
 ```
 ---
 
@@ -209,13 +209,13 @@ cp out/virtual-device_aarch64/dist/nesjoy.ko ~/aosp-raspberry/kernel/nesjoy/
 Após o boot do Android no Raspberry Pi:
 
 ```
-insmod /vendor/lib/modules/nesjoy.ko
+insmod /vendor/lib/modules/joy_driver_module.ko
 ```
 
 Verifique o registro do dispositivo:
 
 ```
-dmesg | grep nesjoy
+dmesg | grep joy_driver_module
 ```
 
 O joystick será reconhecido automaticamente pelo Android:
