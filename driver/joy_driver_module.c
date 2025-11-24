@@ -19,9 +19,17 @@
 // === Definições ===
 #define DRV_NAME "joy_driver_module"
 #define GPIO_OFFSET 512
-#define DATA_GPIO 229
-#define CLK_GPIO 230
-#define SYNC_GPIO 228
+
+//Orange Pi pin setings
+//#define DATA_GPIO 229
+//#define CLK_GPIO 230
+//#define SYNC_GPIO 228
+
+//Raspberyy Pi 4B pin setings
+#define DATA_GPIO 535 // GPIO 23
+#define CLK_GPIO 536  // GPIO 24
+#define SYNC_GPIO 537 // GPIO 25
+
 #define BAUD_RATE       9600
 // Tempo de atraso de 1 bit (em nanosegundos), adaptado para o kernel
 #define BIT_TIME_NS     (1000000000L / BAUD_RATE)
